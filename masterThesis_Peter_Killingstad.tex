@@ -1,6 +1,6 @@
 %\documentclass[a4paper]{memoir}
 \documentclass[a4paper, 12pt]{report}
-\usepackage[top=3cm, bottom=3cm, left=3cm, right=3cm]{geometry}
+\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=3cm]{geometry}
 %\documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
@@ -41,6 +41,12 @@
   file/.pic={%
     \filldraw [draw=folderborder, top color=folderbg!5, bottom color=folderbg!10] (-\Size,.4*\Size+5pt) coordinate (a) |- (\Size,-1.2*\Size) coordinate (b) -- ++(0,1.6*\Size) coordinate (c) -- ++(-5pt,5pt) coordinate (d) -- cycle (d) |- (c) ;
   },
+}
+\usetikzlibrary{calc}
+%\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{%
+    decorations.pathreplacing,%
+    decorations.pathmorphing%
 }
 \forestset{%
   declare autowrapped toks={pic me}{},
@@ -422,7 +428,7 @@ The geometry of the computational domain consists of a barge surface and a farfi
 \\
 Figure \ref{fig:domain} is showing simulation gemoetry with patches atmosphere, front, inlet and outlet included. The Barge is colored red. The dimensions of the barge is taken from \cite{Gou} and $0.6$ m long (x-dir), $0.45$ m wide (y-dir) and $0.35$ m wide (z-dir).  The geometry used in the numerical experiment is using a symmetry plane in y-direction, halving the computational domain. It further only includes what is below the free surface i.e. the draft of the barge. The dimensions of the barge is therefore $0.6$m long, $0.225$m wide and draft is $0.1$m.\\
 \\
-Farfield boundaries are located sufficiently far away to minimize effects of the boundaries on the solution. international Towing Tank Conference has a practical guidelines for ship CFD applications which states that inlet, outlet and "exterior boundary" should be located $1-2$ $\times$ length at draft \cite{ITTC}. This guideline is for simulations containing free-surface. This experiment has no free-surface, but an internal wave. This in combination with highly unstreamlined draft geometry resulted in the following dimensons of the farfield:
+Farfield boundaries are located sufficiently far away to minimize effects of the boundaries on the solution. international Towing Tank Conference has a practical guidelines for ship CFD applications which states that inlet, outlet and "exterior boundary" should be located $1-2$ $\times$ length at draft \cite{ITTC}. This experiment is not modelling the free surface as it is a boundary. It does however modell an internal wave and in combination with highly unstreamlined draft geometry, the resulting farfield  dimensons are:
 \begin{itemize}
 \item inlet located $10.0$ m upstream in front of barge.
 \item outlet located $-15.0$ m downstream of barge.
@@ -438,9 +444,88 @@ Farfield boundaries are located sufficiently far away to minimize effects of the
 \end{figure}
 
 \section{Simulation set-up}
-Simulations is done with a constant draft D of $0.1$ m.  The different experiments is conducted by varying the densimetric Froude number in the range $0.3 \leq Fr_h \leq 135$.  The densimetric Froude number is varied by changing speeds at constant pycnocline depths giving $h/D$ $=$ $1$, $1.5$ and $2$.
+Simulations is done with a constant draft $D = 0.1$ m.  The different experiments is conducted by varying the densimetric Froude number in the range $0.3 \leq Fr_h \leq 1.35$.  The densimetric Froude number is varied by changing speeds at constant pycnocline depths giving $h/D$ $=$ $1$, $1.5$ and $2$.\\
+\\
+Figure \ref{fig:experiment} is showing a schematic overview of the numerical experiment.\\
+\\
+The experiments are done with a moving reference frame, rather than having the barge moving, in order to be able to run simulations sufficiently long.\\
+\\
+The densities of the fluids are set to $997$ kg m$^{-3}$ for fresh water and $1024$ kg m$^{-3}$ for salt water. Kinematic viscosity is set to $\nu = 1.79 \cdot 10^{-6} m^2 s^{-1}$ corresponding to waters at $0^{\circ}$C. The speed  varies as $0.08\leq U \leq 0.22$ corresponding to Reynolds number (\ref{eqn:ReynoldsNumber}) $26815 \leq Re \leq 73743$.\\
+\\
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    media/.style={font={\footnotesize\sffamily}},
+    wave/.style={
+        decorate,decoration={snake,post length=1.4mm,amplitude=2mm,
+        segment length=2mm},thick},
+    interface/.style={
+        % The border decoration is a path replacing decorator. 
+        % For the interface style we want to draw the original path.
+        % The postaction option is therefore used to ensure that the
+        % border decoration is drawn *after* the original path.
+        postaction={draw,decorate,decoration={border,angle=-45,
+                    amplitude=0.3cm,segment length=2mm}}},
+    dimen/.style={<->,>=latex,thin,
+        every rectangle node/.style={fill=white,midway,font=\sffamily}},
+    ]
+    % Round rectangle
+    \fill[gray!10,rounded corners] (-6,-3) rectangle (6,0);
+    % Interface
+    \draw[blue,line width=.5pt,interface](-6,0)--(6,0);
+    % barge
+    \draw[thick,black](-1,3)--(-1,2);
+    \draw[thick,black](-1,2)--(1,2);
+    \draw[thick,black](1,2)--(1,3);
+        \draw[-latex,thick](3.2,0.5)node[right]{Pycnocline}
+         to[out=180,in=90] (3,0);
+    % free surface     
+    \draw[thick,blue](-6,3)--(-1,3);
+    \draw[thick,blue](1,3)--(6,3);
+    % Coordinates system
+    %\draw(0,0.15)node[above]{$x$};
+    %\draw[<->,line width=1pt] (1,0) node[above]{$y$}-|(0,-1) node[left]{$z$};
+
+    % Media names
+    \path[media] (-3,.6)  node {$\rho_0$}
+                 (-3,-.6) node {$\rho_1$};
+    \draw[dimen] (6,3) -- (6,0) node {$h$};
+    \draw [-latex,thick](5,2) -- (3,2)	node [midway,above] {$U$};
+    \draw [-latex,thick](-5.5,2.9) -- (-5.5,0.5)	node [midway,right] {$\mathbf{g}$};    
+	\draw [fill=gray,dashed] (-1, 2) --(-3, 2); 
+	\draw[dimen] (-2,3) -- (-2,2) node [left] {$D$};
+    % $x$ axis
+
+    % Interface pointer
+    \draw[-latex,thick](3.2,0.5)node[right]{Pycnocline}
+         to[out=180,in=90] (3,0);
+    % Barge pointer
+    \draw[-latex,thick](0.2,1.5)node[right]{Barge draft}
+         to[out=180,in=270] (0,1.9);
+    % Free surface pointer
+    \draw[-latex,thick](-3.5,3.5)node[right]{Free surface}
+         to[out=180,in=90] (-3.8,3);         
+    % To-paths are really useful for drawing curved lines. The above
+    % to path is equal to:
+    %
+    % \draw[-latex,thick](3.2,0.5)node[right]{$\mathsf{S_{1,2}}$}
+    %      ..controls +(180:.2cm) and +(up:0.25cm) .. (3,0);
+    % Internally the to path is translated to a similar bezier curve,
+    % but the to path syntax hides the complexity from the user. 
+\end{tikzpicture}
+\caption{Simulation set-up. \\ \textit{Simulations is done by varying speeds $U$ at constant $h/D = 1$, $1.5$ and $2$. Densities $\rho_0$ and $\rho_1$ is that of fresh- and salt-water respectively for stratified fluid simulations. For non-stratified fluid simulations, $\rho_0 = \rho_1$ }}
+\label{fig:experiment}
+\end{figure}
 
 \section{Boundary and Initial conditions}
+Before simulating and solving the numnerical experiment, the momentum and continuity equations (\ref{eqn:momentum} \ref{eqn:continuity}) must have appropriate initial and boundary conditions.\\
+\\
+Boundary conditions are required component of the mathematical model that directs the motion of the flow. It specifies the fluxes such as mass and momentum into and out of the computational domain.\\
+\\
+OpenFOAM is representing boundaries as patches consisting of faces, and all inital and and boundary data are assigned to the patches. Table \ref{tbl:boundaries} is showing an overview of all initial and boundary conditions.\\
+\\
+For velocity U, a typical dirichlet boundary conditions is a applid  at the inlet and on the barge. At the inlet , a \textit{fixedValue} is set, while a no-slip condition is set at the barge. The no-slip condition is a of a special kind, namely \textit{movingWallVelocity}, which is applied for "moving" walls when it is a moving reference frame.
 \begin{landscape}
 	\begin{table}[H]
 		\centering
@@ -456,11 +541,11 @@ Simulations is done with a constant draft D of $0.1$ m.  The different experimen
 			\multirow{2}*{Barge} & Type & M.W.V. & F.F.P. & zeroGradient & kqrW.F. & omegaW.F. & nutUSpaldinW.F.\\
 			&Value & (0 0 0) & internalField & - & internalField & internalField &internalField \\\cline{1-8}
 			
-			\multirow{2}*{atmosphere} & Type & slip & fixedValue & fixedValue & zeroGradient & zeroGradient & zeroGradient\\
-			&Value & - & internalField & internalField &  - &- &-\\\cline{1-8}
+			\multirow{2}*{atmosphere} & Type & slip & fixedValue & zeroGradient & zeroGradient & zeroGradient & zeroGradient\\
+			&Value & - & internalField & - &  - &- &-\\\cline{1-8}
 			
-			\multirow{2}*{atmosphereFrontOfBarge} & Type & inletOutlet & fixedValue & fixedValue &  zeroGradient & zeroGradient & zeroGradient\\
-			&Value & internalField & internalField & internalField & - & - &-\\\cline{1-8}
+			\multirow{2}*{atmosphereFrontOfBarge} & Type & inletOutlet & fixedValue & zeroGradient &  zeroGradient & zeroGradient & zeroGradient\\
+			&Value & internalField & internalField & - & - & - &-\\\cline{1-8}
 			
 			\multirow{2}*{Front} & Type & symmetryPlane & symmetryPlane & symmetryPlane &  symmetryPlane &symmetryPlane & symmetryPlane\\
 			&Value & - & -& - & - &- &-\\\cline{1-8}
@@ -474,7 +559,7 @@ Simulations is done with a constant draft D of $0.1$ m.  The different experimen
 		\end{tabular}
 		\caption{Boundary and initial conditions twoLiquidMixing\\
 			O.P.M.V. = OutletPhaseMeanVelocity, V.H.F.R. = variableHightFlowRate, M.W.V. = movingWallVelocity, F.F.P. = fixedFluxPressure,\\ kqrW.F. = kqrWallFunction, omegaW.F. = omegaWallFunction, nutUSpaldingW.F. = nutUSpaldingWallFunction}
-		\label{tbl:}
+		\label{tbl:boundaries}
 	\end{table}
 \end{landscape}
 
@@ -483,7 +568,6 @@ Three grids has been systematically refined to evaluate grid convergence. With a
 \\
 Two speeds at two different pycnocline depths are used to check for convergence, resulting in  four tests. For each pycnocline depth, two velocities gives  densimetric Froude number corresponding to near-peak drag coefficient and densimetric Froude number close to critical  where drag coefficients changes rapidly as a function of densimetric Froude number.\\
 \\ 
-
 \begin{minipage}{.45\textwidth} 
 	\begin{figure}[H]
 		\centering
@@ -492,6 +576,7 @@ Two speeds at two different pycnocline depths are used to check for convergence,
 		\label{fig:convTestIf01U01}
 	\end{figure}
 \end{minipage}\hfill
+\vspace{2ex}
 \begin{minipage}{.45\textwidth} 
 	\begin{figure}[H]
 		\centering
@@ -509,6 +594,7 @@ Two speeds at two different pycnocline depths are used to check for convergence,
 		\label{fig:convTestIf02U016}
 	\end{figure}
 \end{minipage}\hfill
+\vspace{2ex}
 \begin{minipage}{.45\textwidth} 
 	\begin{figure}[H]
 		\centering
@@ -517,7 +603,7 @@ Two speeds at two different pycnocline depths are used to check for convergence,
 		\label{fig:convTestIf02U022}
 	\end{figure}
 \end{minipage}\hfill
-%\vspace{2ex}
+\vspace{2ex}
 
 \chapter{Analysis and discussion of Results}
 \section{internal wave}
