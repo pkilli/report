@@ -525,7 +525,73 @@ Boundary conditions are required component of the mathematical model that direct
 \\
 OpenFOAM is representing boundaries as patches consisting of faces, and all inital and and boundary data are assigned to the patches. Table \ref{tbl:boundaries} is showing an overview of all initial and boundary conditions.\\
 \\
-For velocity U, a typical dirichlet boundary conditions is a applid  at the inlet and on the barge. At the inlet , a \textit{fixedValue} is set, while a no-slip condition is set at the barge. The no-slip condition is a of a special kind, namely \textit{movingWallVelocity}, which is applied for "moving" walls when it is a moving reference frame.
+\subsection{U}
+For velocity U, typical dirichlet boundary conditions is a applid at the inlet and on the barge. At the inlet there is \textit{fixedValue}  while a no-slip condition is set at the barge. The no-slip condition is a of a special kind, namely \textit{movingWallVelocity}, which is applied for "moving" walls when it is a moving reference frame.\\
+\\
+At outlet there is an \textit{outletPhaseMeanVelocity}. This boundary condition adjusts the velocity for the given phase to achieve the specified mean, thus causing the phase-fraction to adjust according to the mass flow rate.\\
+\\
+\subsubsection{Boundaries for the free surface}
+Since the simulation only includes what happens below the water surface, and the main focus of the experiments is the investigation of the internal wave it, has been rather tricky to decide boundaries for the free surface. The free surface waves that is generated should bee of very small wave length and height due to low Froude numbers (\ref{eqn:FroudeNumber}), as $Fr \leq 0.09 $. An approach has been to apply a Neumann boundary condition of zero gradient at the top. With a zero gradient at the top, the bow of the barge would have been well approximated as the fluid hits the bow and it would allow outflow. At the stern however, the lower pressure would allow inflow. This would have been a good approximation, if the inflow had been consisting of air. The problem is that the inflow at the stern consists of water, causing the interface at the stern to mix and loosing of the stratified water. \\
+\\
+Another approach as been to use a slip condition, which is a mix of Dirichlet and Neumann condition. The flow would then be allowed to flow freely in x- and y direction, but be set at z-direction. This would not allow for in- and outflow.\\
+\\
+With the low Froude number and the goal of the invistigation beeing the internal wave, this could have been a good approximation. The \textit{slip} condition caused an numerical artifact at at a point of the bow of the barge where another boundary condition of symmetry was set. The \textit{symmetryPlane} condition at the front of the domain allows outflow, causing a one cell intersecting both boundary conditions having very large velocity.\\
+\\
+A comprimise has been done, with the top of the domain beeing split into two patches, namely \textit{atmosphere} and \textit{atmosphereFrontOfBarge}. The \textit{atmosphere} patch having a \textit{slip} boundary condition and the \textit{atmosphereFrontOfBarge} having an \textit{inletOutlet} condition. The \textit{inletOutlet} condition is working as a Neumann condition, with the specification of inflow, in case there is any. \\
+\\
+These boundary conditions has a very engineering approach to them, and is not very physical. But as stated earlier in this repert, the main focus is the effect of the internal wave. With the air excluded completely from the simulations, and the low Froude numbers, the final boundary conditions of the free surface is sufficient with the goal of the experiment.
+\subsection{alpha.saltWater}
+The phase fraction \textit{alpha.saltWater} is set in the file \textit{setFieldsDict} where the initial state of the fluid is set.\\
+\\
+As for the boundaries, a fixed value of either $1$ or $0$ is set, where $1$ is salt water and $0$ is fresh water, is set at the inlet. At the outlet, a \textit{variableHightFlowRate} condition is used. It is a phase fraction condition based upon the flow conditions. Values of \textit{alpha.water} is constrained to lay between specified values of upper and lower bounds of $1$ and $0$, i.e.
+\begin{itemize}
+\item If \textit{alpha.water} > 1:
+	\begin{itemize}
+	\item apply a fixed value, with a uniform level $1$.
+\end{itemize}
+\item If $0$ $\leq$ \textit{alpha.saltWater} $\leq$ $1$:
+	\begin{itemize}
+	\item apply a \textit{zeroGradient} condition.
+	\end{itemize}
+\item If \textit{alpha.water} < 0:
+	\begin{itemize}
+	\item apply a fixed value, with a uniform level $0$.
+\end{itemize}
+\end{itemize}
+At the \textit{barge}, a Neumann condition of \textit{zeroGradient} is applied. The same goes for \textit{atmosphere} and \textit{atmosphereFrontOfBarge}.
+\subsection{p\_rgh}
+
+\subsection{Turbulence properties k, nut, omega and epsilon}
+All of the turbulence properties nut, k, omega and epsilon are set with \textit{zeroGradient} at the top patches \textit{atmosphere} and \textit{atmosphereFrontOfBarge}.\\
+\\
+At the inlet, Dirichlet boundaries are set as a fixed value, calculated from equations for setting farfield turbulence conditions.\\
+\\
+Farfield turbulent kinetic energy is set by using:
+\begin{equation}
+k = \frac{3}{2}(UI)^2,
+\label{eqn:turbulentKineticEnergy}
+\end{equation}
+where U is the freestrem speed and I is the turbulence intensity, usually set below 1\% for cases similar to this experiment. \\
+\\
+Farfield omega conditions is set by using:
+\begin{equation}
+\omega = \frac{\sqrt{k}}{C_{\mu}^{1/4}l_t}
+\label{eqn:turbulentOmega}
+\end{equation}
+where $C_{\mu}=0.09$ and $l_t$ is the turbulent length scale, set to $l/100$ where l is the length of the barge.\\
+\\
+Turbulent dissipation rate epsilon is set by using:
+\begin{equation}
+\epsilon =  \frac{c_{\mu}^{3/4} k^{3/2}}{l_t}
+\label{eqn:turbulentDissipationRate}
+\end{equation}
+Finally, the turbulent viscosity is set by using:
+\begin{equation}
+\nu_t = \frac{k}{\omega}
+\label{eqn:turbulentViscosityFarfield}
+\end{equation}
+\subsubsection{Wall functions}
+ At the barge, wall functions is applied as boundary conditions for all the turbulence properties. 
 \begin{landscape}
 	\begin{table}[H]
 		\centering
@@ -557,7 +623,7 @@ For velocity U, a typical dirichlet boundary conditions is a applid  at the inle
 			&Value & - & - & - & - & -& -\\\cline{1-8}
 			
 		\end{tabular}
-		\caption{Boundary and initial conditions twoLiquidMixing\\
+		\caption{Boundary and initial conditions twoLiquidMixing with k-omega SST turbulence model.\\
 			O.P.M.V. = OutletPhaseMeanVelocity, V.H.F.R. = variableHightFlowRate, M.W.V. = movingWallVelocity, F.F.P. = fixedFluxPressure,\\ kqrW.F. = kqrWallFunction, omegaW.F. = omegaWallFunction, nutUSpaldingW.F. = nutUSpaldingWallFunction}
 		\label{tbl:boundaries}
 	\end{table}
@@ -635,17 +701,36 @@ Key points to include:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/VelocityProfileX0.png}
+	\includegraphics[width=0.8\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/VelocityProfileX0.png}
 	\caption{Dimensionless velocity profiles $U_x/U_0$ as function of z-position. \\ \textit{Dimensionlesss velocity profiles $U_x/U_0$ at the stern of barge at $x = 0.0$ m with pycnocline at $ 0.2$. For $Fr_h$ = $0.69$, which has peak $C_d$, there is an increase in velocity and a big velocity gradient. This is causing a lower pressure and smaller boundary layer.}}
 	\label{fig:velocityProfileX0}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/VelocityProfileX2.png}
+	\includegraphics[width=0.8\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/VelocityProfileX2.png}
 	\caption{Dimensionless velocity profiles $U_x/U_0$ as function of z-position. \\ \textit{Dimensionlesss velocity profiles $U_x/U_0$ below barge at $x = 0.3$ m with pycnocline at $ 0.2$. The velocity profile with $Fr_h = 0.35$ has a signifiant increase and a big gradient. The effect on $C_d$ for $Fr_h = 0.35$ is not as significant even though velocity increaces due to the location of the internal wave, shown in figure \ref{fig:eta}.  }}
 	\label{fig:velocityProfileX03}
 \end{figure}
+
+\begin{minipage}[t]{.45\textwidth}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/VelocityProfileX0.png}
+		\caption{$C_d$ as a function of time. \\ \textit{Dimensionlesss velocity profiles $U_x/U_0$ at the stern of barge at $x = 0.0$ m with pycnocline at $ 0.2$. For $Fr_h$ = $0.69$, which has peak $C_d$, there is an increase in velocity and a big velocity gradient. This is causing a lower pressure and smaller boundary layer.}}
+		\label{fig:convTestIf02U016}
+	\end{figure}
+\end{minipage}\hfill
+\vspace{2ex}
+\begin{minipage}[t]{.45\textwidth} 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/Surface.png}
+		\caption{$C_d$ as a function of time. \\ \textit{Dimensionlesss velocity profiles $U_x/U_0$ below barge at $x = 0.3$ m with pycnocline at $ 0.2$. The velocity profile with $Fr_h = 0.35$ has a signifiant increase and a big gradient. The effect on $C_d$ for $Fr_h = 0.35$ is not as significant even though velocity increaces due to the location of the internal wave, shown in figure \ref{fig:eta}.  }}
+		\label{fig:convTestIf02U022}
+	\end{figure}
+\end{minipage}\hfill
+\vspace{2ex}
 
 \begin{figure}[H]
 	\centering
