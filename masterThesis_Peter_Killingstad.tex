@@ -1,6 +1,6 @@
 %\documentclass[a4paper]{memoir}
 \documentclass[a4paper, 12pt]{report}
-\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=3cm]{geometry}
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
 %\documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
@@ -9,8 +9,27 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{xcolor}
-\definecolor{LightGray}{gray}{0.95}
+\definecolor{light-gray}{gray}{0.95}
+%\definecolor{LightGray}{gray}{0.95}
 \usepackage{listings}
+\lstset{frame=tb,
+  language=C++,
+  aboveskip=6mm,
+  belowskip=6mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3,
+  backgroundcolor=\color{light-gray},
+  %language=Matlab
+}
 %\usepackage{color}
 \usepackage{float}
 \usepackage[justification=centering]{caption}
@@ -86,6 +105,12 @@
 
 \chapter{Introduction}
 \pagenumbering{arabic} % Switch to normal numbers
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/paraView/surfaceContour/surfaceCountourIf02U022.png}
+	\caption{Internal wave below the barge\\ \textit{Vizualisation of the internal wave below the barge made by simulating with a pycnocline at 0.2 m and $Fr_h = 0.95$}}
+	\label{fig:eta}
+\end{figure}
 \chapter{Theory: Governing equations, Turbulence, and Numerical methods.}
 \section{Governing equations}
 The study of viscous flow reaches back to acient times. Humans figured out, with clever intuision, trial and error, the importance of viscous friction. Long before any real theoretical understanding of fluid flow, streamlined weapons and boats have been made to overcome the effects of viscosity. In more recent years the understanding has taken huge leaps. Today we have tools to master viscous flow with the help from theory. The fundamental equation describing viscous flow is called Navier-Stokes equation\cite{White}. With the following assumptions: incompressible, newtonian fluids. Density and viscosity may be different, but for one fluid it is constant. This gives the following equations:
@@ -154,6 +179,7 @@ The turbulent kinetic energy is defined by the units $\sim [m^2/s^2] \sim u_0^2$
 \\
 The dissipation rate of kinetic energy is one of the most important results of turbulence theory, and is reffered to as the Kolmogorov relation \cite{Turbulence}. A turbulent eddy with kinetic energy $u_0^2$ either looses its energy or breaks up into smaller eddies in one time scale or period $T \sim l_0/u_0$.\\
 \\
+
 As Reynolds number is very large for turbulent flow, i.e $\frac{u_0l_0}{\nu} \gg 1$, the large scale eddies is independent of the viscosity. To see how viscosity is effecting the turbulent flow, "Kolmogorov micro-scales" can be constructed. Using kinematic viscosity $\nu$ and the dissipation rate $\epsilon$, small scale velocity, length and time can be written out as:
 \begin{eqnarray}
 \label{eqn:microLength}
@@ -165,6 +191,58 @@ v &=& \big(\nu\epsilon\big)^{1/4}, \\
 \end{eqnarray}  
 where  $\eta$ is the micro length-scale, $v$ is the velocity and $\tau$ is the time scale. Reynolds number in the "micro-scale" is given by $\frac{v\eta}{\nu} = 1$, hence the viscosity is of big importance at theese scales. We have that the "micro-scale" eddies is dominated by friction, and small-scale turbulence is almost independent of large scale turbulence for large enough reynolds number.
 
+\subsection{Boundary layer}
+Using Reynolds number (\ref{eqn:ReynoldsNumber}) it is easily shown that, for a thin shear layer flow over a flat plate, inertial forces dominate. A Reynolds number based on $U= 1$m$s^{-1}$, $l_0= 0.1$m and $\nu = 10e-6m^2s^{-1}$ would be $Re_{l_0} = 10e5$, and inertial forces are much larger than viscous forces.\\
+\\
+If Reynolds number is based on a length scale $y$ that is decreasing towards $0$, $Re_y$ would eventually be $\mathcal{O}(1)$. The viscous forces is then either equal or bigger than the inertial forces.\\
+\\
+This close to the wall, the mean velocity depends on the distance $y$, fluid density $\rho$, viscosity $\nu$ and the wall shear stress $\tau_w$, and is usually called the turbulent boundary layer \cite{CFD}.\\
+\\
+By using dimensinal analysis, flow behaviur can be expressed by means of dimensionless groups $u^+$ and $y^+$.\\
+\\
+The dimensionless groups are given by \cite{CFD}
+\begin{eqnarray}
+\label{eqn:upluss}
+u^+ &=& \frac{U}{u_*}\\
+\label{eqn:ypluss}
+y^+ &=& \frac{y u_*}{\nu}\\
+\label{eqn:uStar}
+u_* &=& \sqrt{\frac{\tau_w}{\rho}} 
+\end{eqnarray}
+$u_*$ is the friction velocity.\\
+\\
+Turbulent boundary layer consists of two regions:
+\begin{itemize}
+\item Inner region, consists of tre layers:
+	\begin{itemize}
+	\item where viscous stresses dominates,
+	\item where turbulent stresses dominate,
+	\item where viscous and turbulent stresses are of similar magnitude.
+	\end{itemize}
+\item outer region
+	\begin{itemize}
+	\item inertia dominated flow far from the wall.
+	\end{itemize}
+\end{itemize}
+The layer where viscous stresses dominates is called the viscous sub-layer. It is a linear relationship between the velocity and distance to the wall and is given as \cite{CFD}
+\begin{equation}
+u^+ = y^+
+\label{eqn:viscousSublayer}
+\end{equation}
+The layer is extremely thin, and lies at $y^+ < 5$ \cite{CFD}.\\
+\\ 
+At the layer where turbulent stresses dominates, called the log-layer, the velocity and distance to the wall has a logarithmic relationship. It is given as \cite{CFD}
+\begin{equation}
+u^+ = \frac{1}{\kappa}\ln(y^+) + B
+\label{eqn:logLayer}
+\end{equation}
+The constant $\kappa$ and B is found by doing measurements. The log-layer lies outside the viscous sub-layer, at $30 < y^+ < 300$ \cite{CDF}.\\
+\\
+Between the viscous sub-layer and the loq-layer lies the buffer layer, where the viscous and turbulent stresses are of similar magnitude.\\
+\\
+Equations for the viscous sub-layer and loq-layer (\ref{eqn:viscousSublayer} and  \ref{eqn:logLayer}) are usually called law of the wall and are of great importance in approximating and simulating turbulent boundary layers.\\
+\\
+ 
 \subsection{Computer modelling of turbulence}
 The modelling of turbulent fluid flows and the Navier-Stokes equations has seen huge advancements as computer speed increases. The number of applications of fluid flow predictions has grown and computerized analysis has become a crucial part in the field of fliud mechanics.\\
 \\
@@ -283,6 +361,7 @@ Desity and viscosity are defined as:
 \end{eqnarray}
 
 \section{Numerical discretization}
+\label{sec:NumericalDiscretization}
 Numerical discretization is the prosses of transferring differential equations, such as the Navier- Stokes equations (\ref{eqn:continuity} and \ref{eqn:momentum}), into descrete counterparts.
 A discretization method is needed in order to evaluate the equations on computers. \\
 \\
@@ -300,7 +379,7 @@ A steady one convection-diffusion equation of a property $\phi$ without a source
 \nabla \cdot (\rho \mathbf{u} \phi) =  \nabla \cdot (\Gamma \nabla \phi),
 \label{eqn:stdConvDiff}
 \end{equation}
-where $\rho$ is the density, $\mathbf{u}$ is the velocity and $\Gamma$ is diffusivity.\\
+where $\rho$ is the density, $\mathbf{u}$ is a known velocity and $\Gamma$ is diffusivity.\\
 \\
 Integrating convection-diffusion equation (\ref{eqn:stdConvDiff}) over a control volume (CV) gives:
 \begin{eqnarray}
@@ -308,7 +387,7 @@ Integrating convection-diffusion equation (\ref{eqn:stdConvDiff}) over a control
 \label{eqn:intStdConvDiff}
 \Rightarrow \int_{A} \mathbf{n} \cdot (\rho \mathbf{u} \phi) dA &=& \int_{A} \mathbf{n} \cdot (\Gamma \nabla  \phi) dA.
 \end{eqnarray}
-Gauss theorem \cite{CFD} is applied to change the integration over a control volume to an integration over an area.
+Gauss integration, i.e. Gauss theorem \cite{CFD} is applied to change the integration over a control volume to an integration over an area.
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}
@@ -370,7 +449,12 @@ Rewriting the central difference expression (\ref{eqn:centralDiscretized}), and 
 \Big[(- \frac{\rho u_e}{2} + \frac{\Gamma}{\Delta x_{PE}})A_e\Big]\phi_E + \Big(\frac{\rho u_w}{2} + \frac{\Gamma}{\Delta x_{WP}} )A_w \Big]\phi_W
 \label{eqn:centralDiscretized2}
 \end{eqnarray}
-If for some reason the velocity components of the equation is known, and it is well defined by boundary conditions, the above equation (\ref{eqn:centralDiscretized2}) can be solved as a system of linear equation.\\
+If it is well defined by boundary conditions, the above equation (\ref{eqn:centralDiscretized2}) can be solved as a system of linear equation i.e.:
+\begin{equation}
+\mathbf{A}\mathbf{x}=\mathbf{b}
+\label{eqn:sysOfLinearEqn}
+\end{equation}
+Where $\mathbf{A}$ is a $m \times n$ matrix, $\mathbf{x}$ is a column vector with $n$ entries and b is a column vector with $m$ entries.\\
 \\
 Using the FVM, the discretizations is carried directly in the physical domain. There is no need for any transformation between the physical and computational coordinate, making the FVM flexible and popular method for computational fluid dynamics \cite{CFDOpenFOAM}.
 \chapter{OpenFOAM}
@@ -389,6 +473,7 @@ The solver is solving the flow problem, by implemented numerical methods and alg
 Post-processing consists of verification and validation of the solutions given by the solver. It essential to investigate data output and visualize. The complexity of fluid flows demands thurough investigation by e.g. comparing with existing experiments, either numerical or experimental.\\
 \\
 \section{Introduction to OpenFoam}
+\label{sec:IntroductionToOpenFOAM}
 This paper is using the free, open sorce software OpenFOAM (Field Operation and Manipulation). It is a C$++$ library of source code for solvers and utilities.\\
 \\
 Figure \ref{fig:caseStructure} illustrates an initial state of an OpenFOAM case. Three directories are located in the case folder: 0, constant and system.\\
@@ -433,9 +518,11 @@ The \textit{system} directory contains information about meshing of the numerica
   \label{fig:caseStructure}
 \end{figure}
 
-
 \section{TwoLiquidMixingFoam}
-OpenFOAM has solvers for a wide range of applications. Many multiphase solvers can be found, both miscible and immiscible. This thesis is using the incompressible multiphase solver twoLiquidMixingFoam, where the liquids are miscible.\\
+\label{sec:TwoLiquidMixingFoam}
+OpenFOAM has solvers for a wide range of applications. As mentioned in the section "Introduction to OpenFOAM (\ref{sec:IntroductionToOpenFOAM}), the file \textit{controlDict} found in figure \ref{fig:caseStructure} defines which solver to use.\\
+\\
+Many multiphase solvers can be found, both miscible and immiscible. This thesis is using the incompressible multiphase solver twoLiquidMixingFoam, where the liquids are miscible.\\
 \\
 Three equations are beeing solved. The first equation is the alpha diffusion equation, given by:
 \begin{equation}
@@ -464,18 +551,30 @@ where
 	\item $(\mu_{eff})_i = (\mu - \mu_t)_i$. Subscript $i$ denotes either fluid 1 or 2.
 \end{itemize}
 The term $\nabla(p_{rgh})$ and $gh \nabla \rho$ is obtained by using $P = p_{rgh} + \rho gh$. The Solver is using the Boussinesq eddy-viscosity approximation (\ref{eqn:bossinesq}), and $p$ is the modified pressure and containes the kinetic energy per unit mass $\frac{2}{3}k\delta_{ij}$. 
+\section{Numerical schemes}
+Having defined the equations to be solved in in section \textit{TwoLiquidMixingFoam} (\ref{sec:TwoLiquidMixingFoam}), the way in which to discretize the equations are defined in the file \textit{fvSchemes} found in figure \ref{fig:caseStructure}. The file consists of sub-dictionaries with name corresponding to terms within the equations given in section \textit{TwoLiquidMixingFoam} (\ref{sec:TwoLiquidMixingFoam}). For each term a numerical scheme must be specified.\\
+\\
+Time derivative term $\partial / \partial t$ are discretized by using an \textit{Euler} scheme, a first order implicit difference scheme and is given in the sub-dictionary \textit{ddtSchemes}.\\
+\\
+The other terms are discretized using finite volume method. As explained in section \textit{Numerical discretization} \ref{sec:NumericalDiscretization}, the fvm discretization procedure is done by using gaussian integration and converting the resulting terms into algebraic equations using differencing schemes.\\
+\\
+Gradient terms $\nabla$ is set in the sub-dictionary \textit{gradSchemes}. The terms are discretized by using \textit{Gauss linear}, where the \textit{Gauss} entry denotes Gaussian integrationand the \textit{linear} entry denotes a central differencing scheme.\\
+\\
+Divergence terms $\nabla \cdot$ is set in the sub-dictionary \textit{divSchemes}. There are several advective terms needing discretization. 
 
 \section{Solution algorithms}
-There is three different pressure correction algorithms implemented in OpenFOAM:
+There are several solution algorithms implemented in openFOAM. Solution procedures are needed in order to obtain solutions to pressure and momentum. In multiphase modelling, additional solution procedures are needed in order to obtain solution to the phase fraction and the volume of fluid method.\\
+\\
+There is three different algorithms implemented in OpenFOAM for solving the Navier-Stokes equations (\ref{eqn:momentum}) and (\ref{eqn:continuity}):
 \begin{itemize}
 \item Semi-implicit method for pressure-linked equations SIMPLE algorithm.
 \item pressure-implicit split-operator PISO algorithm.
 \item Pressure-implicit method for pressure-linked equations PIMPLE algorithm.
 \end{itemize}
-All algorithms are iterative procedures for coupling momentum equation (\ref{eqn:momentum}) and continuity equation (\ref{eqn:continuity}).
-SIMPLE is a steady state algorithm, PISO is a transient algorithm and PIMPLE is a semi transient algorithm.\\
+Numerical techniques are required for coupling the pressure and momentum quantities.
+All algorithms are iterative procedures for coupling momentum and pressure. SIMPLE is a steady state algorithm, PISO is a transient algorithm and PIMPLE is a semi transient algorithm.\\
 \\
-
+The twoLiquidMixingFoam solver is using the PIMPLE algorithm for coupling the pressure and momentum. Since it is a multiphase solver, a multi-dimensionsal limiter for explicit solution i.e MULES algorithm is used for solving the phase fraction alpha.
 \chapter{Simulation Design}
 Wether an numerical experiment is succesfull depends largely on the pre-processing. A computational domain has to be made well suited to handle the flow problem. Many factors has to be considered in order to have a good numerical experiment, with mesh quality and and boundary conditions as the key factors.
 \section{Simulation geometry}
@@ -656,7 +755,11 @@ As for the boundaries, a fixed value of either $1$ or $0$ is set, where $1$ is s
 \end{itemize}
 At the \textit{barge}, a Neumann condition of \textit{zeroGradient} is applied. The same goes for \textit{atmosphere} and \textit{atmosphereFrontOfBarge}.
 \subsection{p\_rgh}
-
+For pressure, a \textit{fixedFluxPressure} is used at the inlet and on the barge. The pressure is not known at inlet. The \textit{fixedFluxPressure} is a Neumann condition that is accounting for the flux specified by the velocity set at the boundary.\\
+\\
+For the barge, the velocity is set to 0 by the \textit{noSlip} boundary condition, so the Neumann  condition becomes a \textit{zeroGradient} in reality.\\
+\\
+At the athmospere and atmosphereFrontOfBarge patches there is Dirichlet boundary of \textit{fixedValue} 0. At the outlet there is a Neumann boundary condition of \textit{zeroGradient}. 
 \subsection{Turbulence properties k, nut, omega and epsilon}
 All of the turbulence properties nut, k, omega and epsilon are set with \textit{zeroGradient} at the top patches \textit{atmosphere} and \textit{atmosphereFrontOfBarge}.\\
 \\
@@ -687,10 +790,18 @@ Finally, the turbulent viscosity is set by using:
 \label{eqn:turbulentViscosityFarfield}
 \end{equation}
 \subsubsection{Wall functions}
-At the barge, wall functions is applied as boundary conditions for all the turbulence properties.\\
+Wall funtions are used to avoid resolving all scales in the boundary layer. The wall functions use the dimensional analysis of the boundary layer and law of the wall to estimate values near the wall.\\
 \\
-The wall functions at the barge is used as an estimation to model the fluid flow without having to fully resolve the boundary layer. 
+At the barge, wall functions are applied as boundary conditions for all the turbulence properties.\\
+\\
+Turbulent viscosity $\nu_t$ is using the wall function \textit{nutUSpaldingWallFunction}. The function is using a special curve fit of the law of the wall, in order to be applicable in the whole boundary layer \cite{Spalding}.\\
+\\
+For turbulent kinetic energy $k$, the wall function \textit{kqrWallFunction} has been used. It uses the log-law layer (\ref{eqn:logLayer}) to estimate values for the boundary. Using this wallFunction would require a distance of the first cell adjecent to the barge to be $y^+ > 30$. This has not been fulfilled with the meshes used in this report, but brief test runs with a wall function applicable for smaller values of $y^+$, has been conducted after the mistake was discovered. \textit{kLowReWallFunction} did not make any signifacant effects on the calculated drag in these test runs.\\
+\\
+For omega and epsilon, the wall functions \textit{omegaWallFunction} and \textit{epsilonLowReWallFunction} has been used. Both wall functions are applicable for a wide range og $y^+$ values.
 \section{Mesh and mesh convergence}
+
+\subsection{Convergence tests}
 Three grids has been systematically refined to evaluate grid convergence. With a grid refinement ratio of $\approx 2$, the resulting course, medium and fine grids have $4.2\times 10^5$, $7.4\times 10^5$ and $1.3\times 10^6$ cells respectively.\\
 \\
 Two speeds at two different pycnocline depths are used to check for convergence, resulting in  four tests. For each pycnocline depth, two velocities gives  densimetric Froude number corresponding to near-peak drag coefficient and densimetric Froude number close to critical  where drag coefficients changes rapidly as a function of densimetric Froude number.\\
@@ -898,6 +1009,12 @@ of Turbulent Flows \\
 	Fadl Moukalled, Marwan Darwish, and Luca Mangani.\\
 	The Finite Volume Method in Computational Fluid Dynamics An Advanced Introduction with 	Open-FOAM(R) and Matlab\\
 	volume 113 of Fluid Mechanics and its applications. Springer-Verlag, 2015.
+	
+	\bibitem{Spalding}
+	D. B. Spalding,\\
+	A Single Formula for the "Law of the Wall",\\ 
+	Journal of Applied Mechanics, (1961)
+. 
 	
 \end{thebibliography}
 
