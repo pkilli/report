@@ -291,9 +291,13 @@ Substituting the Boussinesq eddy-viscosity approximation (\ref{eqn:bossinesq}) i
 \end{equation}
 where $P' = \big(P + \frac{2k}{3}\delta_{ij} \big)$ called the modified pressure\cite{Pope}, often used in CFD.\\
 \\
-To complete the closure of the RANS equations, the eddy viscosity term $\nu_t$ needs to be modelled. Dimensional analysis dictates that $\nu_t$ needs to be proportinal to product of a characteristic velocity and a characteristic length scale \cite{Wilcox,AppliedMathematicalModelling}. The difference in models such as the one-equation and two - equation models is the way to calculate the scales. 
-
-
+To complete the closure of the RANS equations, the eddy viscosity term $\nu_t$ needs to be modelled. Dimensional analysis dictates that $\nu_t$ needs to be proportinal to the product of a characteristic velocity and a characteristic length scale \cite{Wilcox,AppliedMathematicalModelling}\\
+\\
+This paper is using two turbulence models for comparison, namely the two-equation models k-$epsilon$ and the shear stress transport model k-$\omega$ SST.\\
+\\
+The k-$\epsilon$ model is perhaps the most widely used, giving good results in classical shear flows. It does however have shortcomings in accurately predicting adverse pressure gradients and boundary layers. despite its shortcomings, the model is recommended in cases with multiphase problems by som literature, i.e \cite{AppliedMathematicalModelling}.\\
+\\
+The k-$\omega$ SST turbulence model is a more advanced model which combines k-$\epsilon$ and k-$\omega$ models. The k-$\epsilon$ model has its shortcomings, as stated above. The $k-\omega$ model was made to better predict adverse pressure gradients and boundary layers, but preformed poorer at free streams. Menter \cite{reviewOfSSTModel} proposed a new model which combined the k-$\epsilon$ and the k-$\omega$ models. In litterature like \cite{CFD} it is stated that k-$\omega$ SST model is superior in approximating adverse pressure gradients and boundary layers. 
 \subsubsection{LES}
 While RANS has the main focus on the mean flow, LES is resolving large scale turbulence. While the effects of large eddies on the flow is resolved, the effect of the small scale eddies is included by a sub-grid scale models \cite{CFD}. \\
 \\
@@ -520,21 +524,22 @@ The \textit{system} directory contains information about meshing of the numerica
 
 \section{TwoLiquidMixingFoam}
 \label{sec:TwoLiquidMixingFoam}
-OpenFOAM has solvers for a wide range of applications. As mentioned in the section "Introduction to OpenFOAM (\ref{sec:IntroductionToOpenFOAM}), the file \textit{controlDict} found in figure \ref{fig:caseStructure} defines which solver to use.\\
+OpenFOAM has solvers for a wide range of applications. As mentioned in the section Introduction to OpenFOAM (\ref{sec:IntroductionToOpenFOAM}), the file \textit{controlDict} found in figure \ref{fig:caseStructure} defines which solver to use.\\
 \\
 Many multiphase solvers can be found, both miscible and immiscible. This thesis is using the incompressible multiphase solver twoLiquidMixingFoam, where the liquids are miscible.\\
 \\
-Three equations are beeing solved. The first equation is the alpha diffusion equation, given by:
+Three equations are beeing solved. The first equation is the alpha diffusion equation, given by \cite{Krpan}
 \begin{equation}
-\frac{\partial \alpha_1}{\partial t} + \nabla \cdot (\rho \mathbf{U} \alpha_1) = \nabla \cdot \Big(\big(D + \frac{1}{S_C} D_t \big)\nabla \alpha_1 \Big) 
+\frac{\partial \alpha_1}{\partial t} + \nabla \cdot (\mathbf{U} \alpha_1) = \nabla \cdot \Big(\big(D + \frac{\nu_t}{S_C}  \big)\nabla \alpha_1 \Big) 
 \label{eqn:alphaEqTLMF}
 \end{equation}
 where
 \begin{itemize}
-	\item $\alpha$ is the volume fraction.	
-	\item $\rho = \alpha_1 \rho_1 + \alpha_2 \rho_2$.
+	\item $\alpha_1$ is the volume fraction.
+	\item $\alpha_2 = 1 - \alpha_1$	
+	\item $\rho = \alpha_1 \rho_1 + \alpha_2 \rho_2 = \alpha_1\rho_1 + (1 - \alpha_1)\rho_2$.
 	\item D is the molecular diffusivity.
-	\item $D_t$ is the molecular diffusivity due to turbulence.
+	\item $\nu_t$ is the turbulent eddy viscosity.
 	\item $s_c$ is the Schmidt number, given as $\mu / (\rho D)$.
 \end{itemize}
 The continuity and momentum equation is given, respectively, as: 
@@ -550,7 +555,46 @@ where
 	\item $\overline{\mu_{eff}} = \alpha_1 (\mu_{eff})_1 + \alpha_2 (\mu_{eff})_2$.
 	\item $(\mu_{eff})_i = (\mu - \mu_t)_i$. Subscript $i$ denotes either fluid 1 or 2.
 \end{itemize}
-The term $\nabla(p_{rgh})$ and $gh \nabla \rho$ is obtained by using $P = p_{rgh} + \rho gh$. The Solver is using the Boussinesq eddy-viscosity approximation (\ref{eqn:bossinesq}), and $p$ is the modified pressure and containes the kinetic energy per unit mass $\frac{2}{3}k\delta_{ij}$. 
+The term $\nabla(p_{rgh})$ and $gh \nabla \rho$ is obtained by using $P = p_{rgh} + \rho gh$. The Solver is using the Boussinesq eddy-viscosity approximation (\
+ref{eqn:bossinesq}), and $p$ is the modified pressure and containes the kinetic energy per unit mass $\frac{2}{3}k\delta_{ij}$.
+\section{Turbulence models}
+This paper is using the RANS method to approximate turbulence. In order to close the RANS equations, turbulence models are beeing used. Two different two-equation models are implemented for comparison.\\
+\\
+The turbulence models used in this paper are the k-$\omega$ SST and the k-$\epsilon$ turbulence model. In section Introduction to openFOAM \ref{sec:IntroductionToOpenFOAM}, the \textit{constant} directory shown in figure \ref{fig:caseStructure} contains the file \textit{turbulenceProperties}. Here it is defined what simulation type that is beeing used, i.e. RANS. It also specifies which turbulence model to use.\\
+\\
+\subsection{k-$\boldsymbol{\epsilon}$ model}
+The standard k-$\epsilon$ model equations is found in a lot of litterature such as \cite{CFD} and \cite{UNIK4900} and is specified as follows:\\
+\\
+Kinematic eddy viscosity equation:
+\begin{equation}
+\mu_t = \rho C_{\mu}\frac{k^2}{\epsilon}
+\label{eqn:nutKEpsilon}
+\end{equation}
+Turbulent kinetic energy equation:
+\begin{equation}
+\frac{\partial \rho k}{\partial t} + U_j \frac{\partial \rho k}{\partial x_j} = \frac{\partial}{\partial x_j}\Big[\frac{\big( \mu + \mu_t\big)}{\sigma_k}\frac{\partial k}{\partial x_j}\Big] - \rho \epsilon + \rho\tau_{ij}\frac{\partial U_i}{\partial x_j}
+\label{eqn:kInKEpsilon}
+\end{equation}
+Turbulence dissipation rate equation:
+\begin{equation}
+\frac{\partial \rho \epsilon }{\partial t} + U_j\frac{\partial \rho \epsilon}{\partial x_j} =\frac{\partial }{\partial x_j}\Big[\frac{\big(\mu + \mu_t\big)}{\sigma_{\epsilon}}\frac{\partial \epsilon}{\partial x_j} \Big]  + \rho C_{\epsilon 1}\frac{\epsilon}{k}\tau_{ij}\frac{\partial U_i}{\partial x_j} - \rho C_{\epsilon 2} \frac{\epsilon ^2}{k}
+\label{eqn:epsilonInKEpsilon}
+\end{equation}
+The model equations use the Boussinesq assumption given in equation (\ref{eqn:bossinesq}) and contains five adjustable constants: $C_{\mu}=0.09$, $\sigma_k=1.0$, $\sigma_{\epsilon}= 1.3$, $C_{\epsilon 1}=1.44$ and $C_{\epsilon 2}=1.92$
+\subsection{k-$\boldsymbol{\omega}$ SST}
+K-$\omega$ model is made by Menter \cite{SST} and is found in littarture and such as \cite{CFD} and \cite{Wilcox}. Other turbulence resources such as \cite{NASA_SST} gives thurough desrcription of the model equations.\\
+\\
+The two-equation model is specified as follows:\\
+\\
+Kinematic eddy viscosity:
+\begin{equation}
+\mu_t = \frac{\rho a_1 k}{max\big(a_1\omega, \Omega F_2\big)}
+\label{eqn:kOmegaTurbulentViscosity}
+\end{equation}
+Turbulent kinetic energy equation:
+\begin{equation}
+\frac{\partial \rho k}{\partial t} + U_j \frac{\partial \rho k}{\partial x_j} = \frac{\partial }{\partial x_j}\Big[\big(\mu + \sigma_k\mu_t\big)\frac{\partial k}{\partial x_j} \Big] + \rho\tau_{ij}\frac{\partial U_i}{\partial x_j}
+\end{equation}
 \section{Numerical schemes}
 Having defined the equations to be solved in in section \textit{TwoLiquidMixingFoam} (\ref{sec:TwoLiquidMixingFoam}), the way in which to discretize the equations are defined in the file \textit{fvSchemes} found in figure \ref{fig:caseStructure}. The file consists of sub-dictionaries with name corresponding to terms within the equations given in section \textit{TwoLiquidMixingFoam} (\ref{sec:TwoLiquidMixingFoam}). For each term a numerical scheme must be specified.\\
 \\
@@ -560,8 +604,18 @@ The other terms are discretized using finite volume method. As explained in sect
 \\
 Gradient terms $\nabla$ is set in the sub-dictionary \textit{gradSchemes}. The terms are discretized by using \textit{Gauss linear}, where the \textit{Gauss} entry denotes Gaussian integrationand the \textit{linear} entry denotes a central differencing scheme.\\
 \\
-Divergence terms $\nabla \cdot$ is set in the sub-dictionary \textit{divSchemes}. There are several advective terms needing discretization. 
-
+Divergence terms $\nabla \cdot$ is set in the sub-dictionary \textit{divSchemes}. There are several divergence terms needing discretization, and specified as:
+\begin{itemize}
+\item \textit{div(rhoPhi,U) Gauss linearUpwind grad(U)}
+\item \textit{div(phi,alpha) Gauss vanLeer}
+\item \textit{div(phirb,alpha) Gauss linear}
+\item \textit{div(phi,k) Gauss upwind}
+\item \textit{div(phi,omega) Gauss upwind}
+\item \textit{div(((rho*nuEff)*dev2(T(grad(U))))) Gauss linear}
+\end{itemize}
+The \textit{phi} entry in the \textit{div(phi,...)} is the volumetric flux of velocity. Gauss entry is the Gaussian integration and last entry is the differencing scheme.\\
+\\
+Laplacian terms $\nabla^2$ is set in the sub-dictionary \textit{laplacianSchemes}, and is discretized as \textit{Gauss linear} with the Gaussian integration and a linear differencing scheme.
 \section{Solution algorithms}
 There are several solution algorithms implemented in openFOAM. Solution procedures are needed in order to obtain solutions to pressure and momentum. In multiphase modelling, additional solution procedures are needed in order to obtain solution to the phase fraction and the volume of fluid method.\\
 \\
@@ -1013,8 +1067,19 @@ of Turbulent Flows \\
 	\bibitem{Spalding}
 	D. B. Spalding,\\
 	A Single Formula for the "Law of the Wall",\\ 
-	Journal of Applied Mechanics, (1961)
-. 
+	Journal of Applied Mechanics, (1961).
+	
+	\bibitem{Krpan}
+	Rok Krpan and Boštjan Končar\\
+	Simulation of Turbulent Wake at Mixing of Two Confined Horizontal Flows
+	Science and Technology of Nuclear Installations,Volume 2018 "Jožef Stefan" Institute, 		Ljubljana, Slovenia
+	\url{https://www.hindawi.com/journals/stni/2018/5240361/}\\
+	
+	\bibitem{SST}	
+	Menter, F. R.\\
+	Two-Equation Eddy-Viscosity Turbulence Models for Engineering Applications\\
+	AIAA Journal, Vol. 32, No. 8, August 1994, pp. 1598-1605.
+	
 	
 \end{thebibliography}
 
