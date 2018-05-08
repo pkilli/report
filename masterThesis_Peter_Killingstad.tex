@@ -293,11 +293,54 @@ where $P' = \big(P + \frac{2k}{3}\delta_{ij} \big)$ called the modified pressure
 \\
 To complete the closure of the RANS equations, the eddy viscosity term $\nu_t$ needs to be modelled. Dimensional analysis dictates that $\nu_t$ needs to be proportinal to the product of a characteristic velocity and a characteristic length scale \cite{Wilcox,AppliedMathematicalModelling}\\
 \\
-This paper is using two turbulence models for comparison, namely the two-equation models k-$epsilon$ and the shear stress transport model k-$\omega$ SST.\\
+This paper is using two turbulence models for comparison, namely the two-equation models k-$\epsilon$ and the shear stress transport model k-$\omega$ SST.
+\subsubsection{k-$\boldsymbol{\epsilon}$ model}
+The standard k-$\epsilon$ model equations is found in a lot of litterature such as \cite{CFD} and \cite{UNIK4900}.\\
 \\
 The k-$\epsilon$ model is perhaps the most widely used, giving good results in classical shear flows. It does however have shortcomings in accurately predicting adverse pressure gradients and boundary layers. despite its shortcomings, the model is recommended in cases with multiphase problems by som literature, i.e \cite{AppliedMathematicalModelling}.\\
+\\ 
+The model equations are specified as follows:\\
 \\
-The k-$\omega$ SST turbulence model is a more advanced model which combines k-$\epsilon$ and k-$\omega$ models. The k-$\epsilon$ model has its shortcomings, as stated above. The $k-\omega$ model was made to better predict adverse pressure gradients and boundary layers, but preformed poorer at free streams. Menter \cite{reviewOfSSTModel} proposed a new model which combined the k-$\epsilon$ and the k-$\omega$ models. In litterature like \cite{CFD} it is stated that k-$\omega$ SST model is superior in approximating adverse pressure gradients and boundary layers. 
+Kinematic eddy viscosity equation:
+\begin{equation}
+\mu_t = \rho C_{\mu}\frac{k^2}{\epsilon}
+\label{eqn:nutKEpsilon}
+\end{equation}
+Turbulent kinetic energy equation:
+\begin{equation}
+\frac{\partial \rho k}{\partial t} + U_j \frac{\partial \rho k}{\partial x_j} = \frac{\partial}{\partial x_j}\Big[\frac{\big( \mu + \mu_t\big)}{\sigma_k}\frac{\partial k}{\partial x_j}\Big] - \rho \epsilon + \rho\tau_{ij}\frac{\partial U_i}{\partial x_j}
+\label{eqn:kInKEpsilon}
+\end{equation}
+Turbulence dissipation rate equation:
+\begin{equation}
+\frac{\partial \rho \epsilon }{\partial t} + U_j\frac{\partial \rho \epsilon}{\partial x_j} =\frac{\partial }{\partial x_j}\Big[\frac{\big(\mu + \mu_t\big)}{\sigma_{\epsilon}}\frac{\partial \epsilon}{\partial x_j} \Big]  + \rho C_{\epsilon 1}\frac{\epsilon}{k}\tau_{ij}\frac{\partial U_i}{\partial x_j} - \rho C_{\epsilon 2} \frac{\epsilon ^2}{k}
+\label{eqn:epsilonInKEpsilon}
+\end{equation}
+The model equations use the Boussinesq assumption given in equation (\ref{eqn:bossinesq}) and contains five adjustable constants: $C_{\mu}=0.09$, $\sigma_k=1.0$, $\sigma_{\epsilon}= 1.3$, $C_{\epsilon 1}=1.44$ and $C_{\epsilon 2}=1.92$
+\subsubsection{k-$\boldsymbol{\omega}$ SST}
+K-$\omega$ model is made by Menter \cite{SST} and is found in littarture and such as \cite{CFD} and \cite{Wilcox}.\\
+\\
+The k-$\omega$ SST turbulence model is a more advanced model which combines k-$\epsilon$ and k-$\omega$ models. The k-$\epsilon$ model has its shortcomings, as stated above. The $k-\omega$ model was made to better predict adverse pressure gradients and boundary layers, but preformed poorer at free streams. Menter \cite{reviewOfSSTModel} proposed a new model which combined the k-$\epsilon$ and the k-$\omega$ models. In litterature like \cite{CFD} it is stated that k-$\omega$ SST model is superior in approximating adverse pressure gradients and boundary layers.\\
+\\
+Turbulence resources such as \cite{NASA_SST} gives thurough desrcription of the model equations. The two-equation model is specified as follows:\\
+\\
+Kinematic eddy viscosity equation:
+\begin{equation}
+\mu_t = \frac{\rho a_1 k}{max\big(a_1\omega, \Omega F_2\big)}
+\label{eqn:kOmegaSSTTurbulentViscosity}
+\end{equation}
+Turbulent kinetic energy equation:
+\begin{equation}
+\frac{\partial \rho k}{\partial t} + U_j \frac{\partial \rho k}{\partial x_j} = \frac{\partial }{\partial x_j}\Big[\big(\mu + \sigma_k\mu_t\big)\frac{\partial k}{\partial x_j} \Big] + \rho P - \beta^* \rho \omega k
+\label{eqn:kOmegaSSTKequation}
+\end{equation}
+Turbulent specific dissipation rate equation:
+\begin{equation}
+\frac{\partial \rho \omega}{\partial t} + U_j \frac{\partial \rho \omega}{\partial x_j} =
+\frac{\partial }{\partial x_j}\Big[\big(\mu + \sigma_{\omega}\mu_t\big)\frac{\partial k}{\partial x_j} \Big] + \frac{\gamma}{\nu_t} \rho P - \beta \rho \omega^2 + 2\big(1 -F_1\big)\frac{\rho \sigma_{\omega 2}}{\omega}\frac{\partial k}{\partial x_j}\frac{\partial \omega}{\partial x_j}
+\label{eqn:kOmegaSSTOmegaequation}
+\end{equation}
+Here $P = \tau_{ij}\frac{\partial U_i}{\partial x_j}$, and $\tau_{ij}$ is the Boussinesq assumption (\ref{eqn:bossinesq}).
 \subsubsection{LES}
 While RANS has the main focus on the mean flow, LES is resolving large scale turbulence. While the effects of large eddies on the flow is resolved, the effect of the small scale eddies is included by a sub-grid scale models \cite{CFD}. \\
 \\
@@ -560,41 +603,7 @@ ref{eqn:bossinesq}), and $p$ is the modified pressure and containes the kinetic 
 \section{Turbulence models}
 This paper is using the RANS method to approximate turbulence. In order to close the RANS equations, turbulence models are beeing used. Two different two-equation models are implemented for comparison.\\
 \\
-The turbulence models used in this paper are the k-$\omega$ SST and the k-$\epsilon$ turbulence model. In section Introduction to openFOAM \ref{sec:IntroductionToOpenFOAM}, the \textit{constant} directory shown in figure \ref{fig:caseStructure} contains the file \textit{turbulenceProperties}. Here it is defined what simulation type that is beeing used, i.e. RANS. It also specifies which turbulence model to use.\\
-\\
-\subsection{k-$\boldsymbol{\epsilon}$ model}
-The standard k-$\epsilon$ model equations is found in a lot of litterature such as \cite{CFD} and \cite{UNIK4900} and is specified as follows:\\
-\\
-Kinematic eddy viscosity equation:
-\begin{equation}
-\mu_t = \rho C_{\mu}\frac{k^2}{\epsilon}
-\label{eqn:nutKEpsilon}
-\end{equation}
-Turbulent kinetic energy equation:
-\begin{equation}
-\frac{\partial \rho k}{\partial t} + U_j \frac{\partial \rho k}{\partial x_j} = \frac{\partial}{\partial x_j}\Big[\frac{\big( \mu + \mu_t\big)}{\sigma_k}\frac{\partial k}{\partial x_j}\Big] - \rho \epsilon + \rho\tau_{ij}\frac{\partial U_i}{\partial x_j}
-\label{eqn:kInKEpsilon}
-\end{equation}
-Turbulence dissipation rate equation:
-\begin{equation}
-\frac{\partial \rho \epsilon }{\partial t} + U_j\frac{\partial \rho \epsilon}{\partial x_j} =\frac{\partial }{\partial x_j}\Big[\frac{\big(\mu + \mu_t\big)}{\sigma_{\epsilon}}\frac{\partial \epsilon}{\partial x_j} \Big]  + \rho C_{\epsilon 1}\frac{\epsilon}{k}\tau_{ij}\frac{\partial U_i}{\partial x_j} - \rho C_{\epsilon 2} \frac{\epsilon ^2}{k}
-\label{eqn:epsilonInKEpsilon}
-\end{equation}
-The model equations use the Boussinesq assumption given in equation (\ref{eqn:bossinesq}) and contains five adjustable constants: $C_{\mu}=0.09$, $\sigma_k=1.0$, $\sigma_{\epsilon}= 1.3$, $C_{\epsilon 1}=1.44$ and $C_{\epsilon 2}=1.92$
-\subsection{k-$\boldsymbol{\omega}$ SST}
-K-$\omega$ model is made by Menter \cite{SST} and is found in littarture and such as \cite{CFD} and \cite{Wilcox}. Other turbulence resources such as \cite{NASA_SST} gives thurough desrcription of the model equations.\\
-\\
-The two-equation model is specified as follows:\\
-\\
-Kinematic eddy viscosity:
-\begin{equation}
-\mu_t = \frac{\rho a_1 k}{max\big(a_1\omega, \Omega F_2\big)}
-\label{eqn:kOmegaTurbulentViscosity}
-\end{equation}
-Turbulent kinetic energy equation:
-\begin{equation}
-\frac{\partial \rho k}{\partial t} + U_j \frac{\partial \rho k}{\partial x_j} = \frac{\partial }{\partial x_j}\Big[\big(\mu + \sigma_k\mu_t\big)\frac{\partial k}{\partial x_j} \Big] + \rho\tau_{ij}\frac{\partial U_i}{\partial x_j}
-\end{equation}
+The turbulence models used in this paper are the k-$\omega$ SST and the k-$\epsilon$ turbulence model. In section Introduction to openFOAM \ref{sec:IntroductionToOpenFOAM}, the \textit{constant} directory shown in figure \ref{fig:caseStructure} contains the file \textit{turbulenceProperties}. Here it is defined what simulation type that is beeing used, i.e. RANS. It also specifies which turbulence model to use.
 \section{Numerical schemes}
 Having defined the equations to be solved in in section \textit{TwoLiquidMixingFoam} (\ref{sec:TwoLiquidMixingFoam}), the way in which to discretize the equations are defined in the file \textit{fvSchemes} found in figure \ref{fig:caseStructure}. The file consists of sub-dictionaries with name corresponding to terms within the equations given in section \textit{TwoLiquidMixingFoam} (\ref{sec:TwoLiquidMixingFoam}). For each term a numerical scheme must be specified.\\
 \\
@@ -852,8 +861,17 @@ Turbulent viscosity $\nu_t$ is using the wall function \textit{nutUSpaldingWallF
 \\
 For turbulent kinetic energy $k$, the wall function \textit{kqrWallFunction} has been used. It uses the log-law layer (\ref{eqn:logLayer}) to estimate values for the boundary. Using this wallFunction would require a distance of the first cell adjecent to the barge to be $y^+ > 30$. This has not been fulfilled with the meshes used in this report, but brief test runs with a wall function applicable for smaller values of $y^+$, has been conducted after the mistake was discovered. \textit{kLowReWallFunction} did not make any signifacant effects on the calculated drag in these test runs.\\
 \\
-For omega and epsilon, the wall functions \textit{omegaWallFunction} and \textit{epsilonLowReWallFunction} has been used. Both wall functions are applicable for a wide range og $y^+$ values.
+For omega and epsilon, the wall functions \textit{omegaWallFunction} and \textit{epsilonWallFunction} has been used. Both wall functions are applicable for a wide range og $y^+$ values.
 \section{Mesh and mesh convergence}
+The outcome of a numerical experiment is highly dependent on the mesh quality. A multiphase simulation investigating drag and internal waves needs a mesh suitable to capture the phenomenon. At the same time the mesh has to account for computational cost, as the computational resources available is rather limited for the scope of this thesis.
+\subsection{Meshing procedure}
+The background mesh, or rather the base mesh is made by defining a \textit{blockMeshDict} file that generates a mesh that is refined in the area of the pycnocline shown in figure \ref{fig:baseMesh}. The base mesh is made to be uniform in the spatial x- and y-direction, except for z-direction, where it is refined to better capture the pycnocline in the entire computational domain. Number of cells in the base mesh is 12668. In order to increase mesh quality, refinement is needed.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/paraView/MESH/meshBeforeRefinement.png}
+	\caption{Base mesh generated by blockMesh\\ \textit{The base mesh made in blockMeshDict and generated by blockMesh consists of 12668 cells. It has uniform spatially distribution in x- and y- direction, while z-direction is refined in the area where pycnocline is located.}}
+	\label{fig:baseMesh}
+\end{figure}
 
 \subsection{Convergence tests}
 Three grids has been systematically refined to evaluate grid convergence. With a grid refinement ratio of $\approx 2$, the resulting course, medium and fine grids have $4.2\times 10^5$, $7.4\times 10^5$ and $1.3\times 10^6$ cells respectively.\\
