@@ -892,7 +892,7 @@ Two speeds at two different pycnocline depths are used to check for convergence,
 \\
 Figure \ref{fig:convTestIf01U01} and \ref{fig:convTestIf01U022} are showing test runs with pycnocline located at $0.1$m ($h/D = 1$) below the barge and with $Fr_h = 0.86$ and $Fr_h = 1.35$ respectively. Turbulence model used in the tests are the k-$\omega$ SST. The tests show that there is not much difference between the medium and fine grids, while the corse grid is oscillating around a value of $C_d$ i.e. it has not converged.\\
 \\
-Table \ref{tbl:YplussValuesConvergenceTest1} shows the avarage $Y^+$ values obtained from the convergence tests. The $Y^+$ values lies all within the buffer layer, suggesting that the Wall functions must be applicable for a wide range of $Y^+$ values.
+Table \ref{tbl:YplussValuesConvergenceTest1} shows the avarage $y^+$ values obtained from the convergence tests. The $y^+$ values lies all within the buffer layer, suggesting that the Wall functions must be applicable for a wide range of $y^+$ values.
 \begin{table}[H]
 \centering
 \begin{tabular}{c|c|c}
@@ -902,7 +902,7 @@ Table \ref{tbl:YplussValuesConvergenceTest1} shows the avarage $Y^+$ values obta
 \ Medium	&  8.39	& 11.33	\\\cline{1-3}
 \ Fine		&  6.8	&  8.95	\\
 \end{tabular}
-\caption{Average $y^+$ values for pycnocline at $0.1$m  \\ \textit{Average $Y^+$ value obtained from running convergence tests.\\ All $Y^+$ values lies within the buffer layer, with the finest mesh tending towards viscous sub-layer}}
+\caption{Average $y^+$ values for pycnocline at $0.1$m  \\ \textit{Average $y^+$ value obtained from running convergence tests.\\ All $y^+$ values lies within the buffer layer, with the finest mesh tending towards viscous sub-layer}}
 \label{tbl:YplussValuesConvergenceTest1}
 \end{table}
 
@@ -927,11 +927,11 @@ Table \ref{tbl:YplussValuesConvergenceTest1} shows the avarage $Y^+$ values obta
 \\
 Figure \ref{fig:convTestIf02U016} and \ref{fig:convTestIf02U022} are showing test runs with pycnocline located at $0.2$m ($h/D=2$) below the barge and with $Fr_h = 0.61$ and $Fr_h = 0.95$ respectively. Turbulence model used in the tests are the k-$\omega$ SST. The tests show the same trends as the tests done with pycnocline located $0.1$m below the barge.\\
 \\
-Table \ref{tbl:YplussValuesConvergenceTest2} shows the avarage $Y^+$ values obtained from the convergence tests with pycnocline located at $0.2$m below the barge. The $Y^+$ values lies all within the buffer layer, suggesting that the Wall functions must estimate the whole turbulent boundary region
+Table \ref{tbl:YplussValuesConvergenceTest2} shows the avarage $y^+$ values obtained from the convergence tests with pycnocline located at $0.2$m below the barge. The $y^+$ values lies all within the buffer layer, suggesting that the Wall functions must estimate the whole turbulent boundary region
 \begin{table}[H]
 \centering
 \begin{tabular}{c|c|c}
-\diagbox{Mesh}{$Fr_h$} & {0.86} & {1.35} \\
+\diagbox{Mesh}{$Fr_h$} & {0.61} & {0.95} \\
 \cline{1-3}
 \ Coarse	& 11.89	& 14.50 \\\cline{1-3}
 \ Medium	&  9.74	& 11.53	\\\cline{1-3}
@@ -962,7 +962,39 @@ Table \ref{tbl:YplussValuesConvergenceTest2} shows the avarage $Y^+$ values obta
 \\
 From the convergence tests it is clear that it is not much to gain convergence wise by using a finer mesh. The resulting $C_d$'s are very similar comparing the medium and fine grids. By using the medium mesh, computational time is saved and many more simulations  can be done within the time frame of this thesis.   
 
-\chapter{Analysis and discussion of Results}
+\chapter{Results}
+\section{Comparison of turbulence models}
+Comparison of the turbulence models was done by running numerical experiments with the exact same mesh. The tests was done with a pycnocline depth of $0.2$m below the barge. Two cases are presented, the first with a densimetric Froude number $Fr_h=0.69$ and the second with $Fr_h=0.95$. The first test lies whithin the range where $Fr_h$ should give peak $C_d$ and the second test where $Fr_h$ should give a lower $C_d$ that tends towards a non-stratified fluid case.\\
+\\
+The comparison is done by checking convergence of the $C_d$ for the two cases. The motivation for comparing the $C_d$ and not any other parameters is that of the main scope of this project, investigating the increase in $C_d$ in the range of $0.6\leq Fr_h \leq 0.8$ in stratified fluids. It is essential to have a turbulence model that best approximate the $C_d$ \\
+\\
+The first test is shown in figure \ref{fig:turbulenceModelComparison1}. From the figure it is shown that the turbulence model k-$\omega$ SST gives a good convergence of the $C_d$. The model k-$\epsilon$ on the other hand sees an increace of $C_d$ throughout the entire expriment and gets even more unstable as time increases.\\
+\\
+THe second test is shown in figure \ref{fig:turbulenceModelComparison2}, and is showing the same trend as seen in the first test. K-$\omega$ SST gives a good convergence, while k-$\epsilon$ gets an increase in $C_d$ as time increases. In the second test, k-$\epsilon$ even starts to oscillate as the time increases.\\
+\\
+From the tests it is concluded that k-$\omega$ SST model is the most reliable investigating the "dead water" phenomenon going further.\\
+\\
+Even though the theory states that the k-$\omega$ turbulence model yields better results when simulating adverse pressure gradients and boundary layer \cite{CFD}, it serves a purpose to compare with other models. As stated in theory, the k-$\epsilon$ model can get reliable results when simulating multiphase fluids. The comparison of the models only confirms the theory that the k-$\omega$ SST model is superior in estimating boundary layers and adverse pressure gradients.\\
+\\
+\begin{minipage}[t]{.45\textwidth}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/turbulenceModelComparison/U016.png}
+		\caption{$C_d$ as a function of time.\\ \textit{Simulations done with a pycnocline at $0.2$m and $Fr_h=0.69$. $k-\epsilon$ Turbulence model yields a higher $C_d$ than the $k-\omega$ SST model. While the $k-\omega$ SST model converges, $k-\epsilon$ model has a steady growth of $C_d$ and gets more unstable as time increases}}
+		\label{fig:turbulenceModelComparison1}
+	\end{figure}
+\end{minipage}\hfill
+\vspace{2ex}
+\begin{minipage}[t]{.45\textwidth} 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/turbulenceModelComparison/U022.png}
+		\caption{$C_d$ as a function of time.  \\ \textit{Simulations done with a pycnocline at $0.2$m and $Fr_h=0.95$. $k-\epsilon$ Turbulence model yields a higher $C_d$ than the $k-\omega$ SST model. While the $k-\omega$ SST model converges, $k-\epsilon$ model has a steady growth of $C_d$ and starts to oscillate as time increases}}
+		\label{fig:turbulenceModelComparison2}
+	\end{figure}
+\end{minipage}\hfill
+%\vspace{2ex}
+
 \section{internal wave}
 
 \section{Drag}
@@ -979,56 +1011,16 @@ Key points to include:
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/Gou2KOSpaldingRefType2kLowRe.png}
-	\caption{Drag force as function of velocity squared. \\ \textit{Resistance in homogeneous fluid with barge draft $=0.1$. Simulations is in good agreement with experimental data obtained on an identical barge done by Gou et. al. \cite{Gou} with a deviance of approximately 20 \%. Resistance is directly proportianal to the square of the towing speed, which means that the drag coefficient is constant. }}
+	\caption{Drag force as function of velocity squared. \\ \textit{Resistance in homogeneous fluid with barge draft $=0.1$. Simulations is in good agreement with experimental data obtained on an identical barge done by Gou et. al. \cite{Gou} with a deviance of $\approx 20$ \%. Resistance is directly proportianal to the square of the towing speed, which means that the drag coefficient is constant. }}
 	\label{fig:dragForce}
 \end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=1\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/Surface.png}
-	\caption{Pycnocline as a function of x-position. \\ \textit{Pycnocline (internal wave interface) below the barge as a function of x-position. Pycnocline is initially at $z = 0.2$ for the stratified case. For the non-stratified (single) case, there is a transported passive scalar. As $Fr_h$ increases, wave amplitude increase and it's corresponding x-position is located further back. Location of amplitude has significant effect on flow field as shown in figure \ref{fig:velocityProfileX0} and \ref{fig:velocityProfileX03}. The internal wave restricts the passage area. This in turn effects $C_d$ as shown in figure \ref{fig:Cd}. }}
-	\label{fig:eta}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/VelocityProfileX0.png}
-	\caption{Dimensionless velocity profiles $U_x/U_0$ as function of z-position. \\ \textit{Dimensionlesss velocity profiles $U_x/U_0$ at the stern of barge at $x = 0.0$ m with pycnocline at $ 0.2$. For $Fr_h$ = $0.69$, which has peak $C_d$, there is an increase in velocity and a big velocity gradient. This is causing a lower pressure and smaller boundary layer.}}
-	\label{fig:velocityProfileX0}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/VelocityProfileX2.png}
-	\caption{Dimensionless velocity profiles $U_x/U_0$ as function of z-position. \\ \textit{Dimensionlesss velocity profiles $U_x/U_0$ below barge at $x = 0.3$ m with pycnocline at $ 0.2$. The velocity profile with $Fr_h = 0.35$ has a signifiant increase and a big gradient. The effect on $C_d$ for $Fr_h = 0.35$ is not as significant even though velocity increaces due to the location of the internal wave, shown in figure \ref{fig:eta}.  }}
-	\label{fig:velocityProfileX03}
-\end{figure}
-
-\begin{minipage}[t]{.45\textwidth}
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/VelocityProfileX0.png}
-		\caption{$C_d$ as a function of time. \\ \textit{Dimensionlesss velocity profiles $U_x/U_0$ at the stern of barge at $x = 0.0$ m with pycnocline at $ 0.2$. For $Fr_h$ = $0.69$, which has peak $C_d$, there is an increase in velocity and a big velocity gradient. This is causing a lower pressure and smaller boundary layer.}}
-		\label{fig:convTestIf02U016}
-	\end{figure}
-\end{minipage}\hfill
-\vspace{2ex}
-\begin{minipage}[t]{.45\textwidth} 
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/Surface.png}
-		\caption{$C_d$ as a function of time. \\ \textit{Dimensionlesss velocity profiles $U_x/U_0$ below barge at $x = 0.3$ m with pycnocline at $ 0.2$. The velocity profile with $Fr_h = 0.35$ has a signifiant increase and a big gradient. The effect on $C_d$ for $Fr_h = 0.35$ is not as significant even though velocity increaces due to the location of the internal wave, shown in figure \ref{fig:eta}.  }}
-		\label{fig:convTestIf02U022}
-	\end{figure}
-\end{minipage}\hfill
-\vspace{2ex}
 
 \begin{minipage}[t]{.45\textwidth}
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/esmaeilpourSpaldingRefType2kLowRe.png}
-		\caption{Drag coefficient as function of densimetric Froude number.  \\ \textit{Drag coefficients ($C_d$) obtained by running simulations with different interface height. $C_d$ peaks within a range of $Fr_h = 0.6$ and $0.8$. For all interface hights there is the same trend that $C_d$ tends towards simulations of homogeneous fliud (single phase) as densimetric Froude number $Fr_h \leq 0.6$ and $Fr_h \geq 0.8$.}}
-		\label{fig:convTestIf02U016}
+		\caption{Drag coefficient as function of densimetric Froude number $Fr_h$  \\ \textit{Drag coefficients ($C_d$) obtained by running simulations with $h/D=1$, $1.5$ and $2$. $C_d$ peaks within a range of $Fr_h = 0.6$ and $0.8$. $C_d$ tends towards simulations of non-stratified fluid for all pycnocline locations when $Fr_h \leq 0.6$ and $Fr_h \geq 0.8$.}}
+		\label{fig:Cd}
 	\end{figure}
 \end{minipage}\hfill
 \vspace{2ex}
@@ -1037,16 +1029,35 @@ Key points to include:
 		\centering
 		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/esmaeilpourSpaldingRefType2kLowRePercentage.png}
 		\caption{Drag coefficient as function of densimetric Froude number.  \\ \textit{Drag coefficients ($C_d$) obtained by running simulations with different interface height. $C_d$ peaks within a range of $Fr_h = 0.6$ and $0.8$. For all interface hights there is the same trend that $C_d$ tends towards simulations of homogeneous fliud (single phase) as densimetric Froude number $Fr_h \leq 0.6$ and $Fr_h \geq 0.8$.}}
-		\label{fig:convTestIf02U022}
+		\label{fig:CdPercentageDifference}
+	\end{figure}
+\end{minipage}\hfill
+\vspace{2ex}
+
+\begin{minipage}[t]{.45\textwidth} 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/Surface.png}
+		\caption{Pycnocline as a function of x-position. \\ \textit{Pycnocline below the barge at the symmetry plane as a function of x-position. Initially $h/D=2$. As $Fr_h$ increases, wave amplitude increase and the crest located further back. Location of crest has significant effect on flow field as shown in figure \ref{fig:velocityProfileX0}. The internal wave restricts the passage area, causing a significant increase in speed. This effects on $C_d$ are shown in figure \ref{fig:Cd}.}}
+		\label{fig:eta1}
+	\end{figure}
+\end{minipage}\hfill
+\vspace{2ex}
+\begin{minipage}[t]{.45\textwidth}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/VelocityProfileX0.png}
+		\caption{velocity profiles $U_x/U_0$ as function of z-position. \\ \textit{Dimensionlesss velocity profiles $U_x/U_0$ below barge at $x = 0.0$m with pycnocline at $0.2$m. The velocity profile with $Fr_h = 0.69$ has a signifiant increase in speed and greater gradient.}}
+		\label{fig:velocityProfileX0}
 	\end{figure}
 \end{minipage}\hfill
 \vspace{2ex}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/esmaeilpourSpaldingRefType2kLowRe.png}
-	\caption{Drag coefficient as function of densimetric Froude number. \\ \textit{Drag coefficients ($C_d$) obtained by running simulations with different interface height. $C_d$ peaks within a range of $Fr_h = 0.6$ and $0.8$. For all interface hights there is the same trend that $C_d$ tends towards simulations of homogeneous fliud (single phase) as densimetric Froude number $Fr_h \leq 0.6$ and $Fr_h \geq 0.8$.}}
-	\label{fig:Cd}
+	\includegraphics[width=0.75\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/paraView/velocityAndNormalsZ/VelocityAndPycnoclineNormalsZIf02U016Test.png}
+	\caption{ \\ \textit{}}
+	\label{fig:velocityAndPycnoclineIf02U016Test}
 \end{figure}
 
 \chapter{Conclusions and further recommendations}
