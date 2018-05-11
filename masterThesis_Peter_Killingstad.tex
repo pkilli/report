@@ -105,12 +105,42 @@
 
 \chapter{Introduction}
 \pagenumbering{arabic} % Switch to normal numbers
+Dead water is the phenomenon where internal waves are causing boats or vessels, moving along the surface of a stratified fluid, to experience increased drag force. A stratified fluid can be observed in the ocean where layers have different salinity, or temperature jumps, causing a difference in density. Rapidly melting glaciers can cause a layer of fresh water on top of denser ocean salt water, or a layer of warmer ocean currents can be lying on top of colder currents. The internal gravity waves occurs where the maximum vertical density gradient is located, called the pycnocline.\\
+\\
+The Norwegian scientist and explorer Fridtjof Nansen was the first to describe the phenomenon \citep{Nansen}. During the FRAM expidition while passing north of Sibira, his boat FRAM experienced a reduction in speed to about a fifth part, even though the engine was working on full power. As the speed was reduced, F. Nansen described internal waves accross the wake, arising sometimes as far as almost midships. Ekman later conducted the first experimental study on the phenomenon\cite{Ekman}, by using a towing tank with stratified water conditions. The study concluded that the model experienced an increase in drag force due to the internal waves.\\
+\\
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/paraView/surfaceContour/surfaceCountourIf02U022.png}
-	\caption{Internal wave below the barge\\ \textit{Vizualisation of the internal wave below the barge made by simulating with a pycnocline at 0.2 m and $Fr_h = 0.95$}}
-	\label{fig:eta}
+	\includegraphics[width=0.70\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/paraView/surfaceContour/surfaceCountourIf02U022.png}
+	\caption{Internal wave below a barge\\ \textit{Vizualisation of an internal wave below and in the wake of a barge made by simulating with Computational fluid dynamics. The internal wave occurs at the pycnocline located at 0.2 m below the surface.}}
+	\label{fig:eta0}
 \end{figure}
+This project is mainly motivated by the recently published work of J. Grue \cite{Grue}, Gou et al. \cite{Gou} and Esmaeilpour et al. \cite{Esmaeilpour}.\\
+J. Grue investigated the dead water resistance on the Polar ship FRAM by using two methods. The first is emperical, using F. Nansen own observations, and the other is a strongly non linear interfacial method in three dimensions.\\
+Gou et al. investigated drag force on a barge in two layer fluid. The investigation was done by conducting three dimensional experiments in a towing tank. \\
+Esmaeilpour et al. studied dead water resistance on a vessel by simulating the phenomenon using computational fluid dynamics.\\
+\\
+Navier-Stokes equation is the fundamental equation describing viscous fliud flow, including the dead water phenomenon. In this project, the dead water phenomenon is studied by using computational fluid dynamics. In order to fully resolve the 3-dimensional Navier-Stokes equation, computer simulation and discretization is needed as no explicit solution exists. Simulations of experiments on a barge moving in stratified waters is done by using the free open sorce software openFOAM.\\
+\\
+The main focus of the project is to study the drag force and the increase in drag due to stratified water. Non-stratified and stratified fluid simulations is conducted for qualitative understanding and comparison. Three different pycnocline depths are simulated for the stratified fluid cases. Simulations are done with different speeds in order to obtain densimetric Froude numbers in regions $0.35 \leq Fr_h \leq 1.35$.  Increase in drag are presented for each pycnocline depth. Peak drag is shown to occur within a range of densimetric Froude number of $0.6 < Fr_h < 0.7$. The position of the internal gravity wave and its location below the barge is shown to have significant effect on the drag. Depending on the location of the internal gravity waves, velocity profiles below the stern of the barge are shown to be significantly effected \\
+\\
+As the barge is moving through the stratified waters, the flow is turbulent. To fully obtain details of the rapidly fluctuating flow is impossible, as it reqiures a huge amount of computational power. Various techniques of modelling turbulent flow is presentet. This project is using Reynolds avaraged Navier-Stokes (RANS) equations, a method focusing on the mean fliud flow.Two RANS turbulence models are presented, tested and compared to find the most suitable model to simulate dead water.\\
+\\
+Stratified fluid simulations contains fresh- and salt-water, fluids with different densities. OpenFOAM has several multi phase solvers implemented. This project is using the solver \textit{twoLiquidMixingFoam} which solves the multi phase problem using the volume of fluid method. It solves for two miscible fluids and the mixing of fresh-and salt-water is estimated.\\
+\\
+OpenFOAM is using the finite volume method, a numerical technique to discretize the equations. Brief motivation for the method is presented, along with a differential scheme. A computational domain has been made that consitst of a mesh grid in which the discretized equations can be solved. The computational domain needs to be well defined at the boundaries in order to get meaningfull results. initial and boundary conditions are defined for the all the variables included in the equations.\\
+\\
+Quality of the mesh is essential in order to get good results. Convergence tests of three systematically refined grids are conducted to make sure that the mesh used in the simulations is stable, and at the same time is computational efficient.\\
+\\
+In the following chapters, theory, introduction to OpenFOAM, simulation design, results and finally a conclusion is presented.\\
+\\
+The fist chapter contains introduction to the governing equations of the problem. It further gives a brief description to physical concepts of turbulence, boundary layer theory and computer modelling of turbulence. The theory behind the volume of fluid method is presented and finally an outline of the finite volume method used to discretize the equations is presented.\\
+\\
+Following chapter introduces the open software OpenFOAM, its structure and solving procedure.\\
+\\
+The simulation design chapter describes the numerical experiment, with domain geometry and physical setup. It further presents Initial and boundary conditions before mesh quality and convergence tests are presented.\\
+\\
+Finally the rusults are shown and discussions of the outcome, before a conclusion and further recomendations are presented.  
 \chapter{Theory: Governing equations, Turbulence, and Numerical methods.}
 \section{Governing equations}
 The study of viscous flow reaches back to acient times. Humans figured out, with clever intuision, trial and error, the importance of viscous friction. Long before any real theoretical understanding of fluid flow, streamlined weapons and boats have been made to overcome the effects of viscosity. In more recent years the understanding has taken huge leaps. Today we have tools to master viscous flow with the help from theory. The fundamental equation describing viscous flow is called Navier-Stokes equation\cite{White}. With the following assumptions: incompressible, newtonian fluids. Density and viscosity may be different, but for one fluid it is constant. This gives the following equations:
@@ -159,7 +189,7 @@ internal waves depends on the densimetric Froude number:
 Fr_h = \frac{U_0}{c^*}.
 \label{eqn:densimetricFroudeNumber}
 \end{equation}
-$U_0$ is the ship speed, $g$ is gravity and $L_0$ is the ship length at water level. $c^*$ represents the celerity of the longest internal waves. For an infinitely deep denser fluid, $c^*$ is given as:
+$U_0$ is the ship speed, $g$ is gravity and $L_0$ is the ship length at water level. $c^*$ represents the celerity of the longest internal waves. For an infinitely deep stratified fluid, $c^*$ is given as:
 \begin{equation}
 c^* = \sqrt{gh\frac{\Delta \rho}{\rho_0}}
 \label{eqn:celerityWaves}
@@ -169,11 +199,11 @@ where h is the distance from the free surface to the pycnocline, $\Delta \rho$ i
 \subsection{Physical concepts of turbulence}
 Turbulence is the phenomenon where a fluid flow appears to be chaotic and random. Unlike laminar flow, where the fluid flows in an orderly fashion, turbulent flow is rapidly fluctuating in all spatial dimensions. Structures of the flow is varying from large scales comparable to the dimensions of the physical boundaries to small scales.\\
 \\
-The main characteristics of turbulence is the transfer of energy from larger spatial scales into smaller, happening in a three dimensional space and time(\textcolor{red}{need reference}).\\
+The main characteristics of turbulence is the transfer of energy from larger spatial scales into smaller, happening in a three dimensional space and time.\\
 \\
- To discuss the main characteristics of turbulence, a usefull concept is that of an "eddy". An eddy can be thought of as typical turbulence pattern of small- and large- scales all co-existing in the same fluid. The eddies consists of vortexes intertwined in a chaotic manner, beeing streched by the mean flow and pulled in random directions by one another(\textcolor{red}{need reference}). This mechanism ultimately leads to braking of the eddies into smaller ones, leading to an "energy cascade"(\textcolor{red}{need reference}).\\
+ To discuss the main characteristics of turbulence, a usefull concept is that of an "eddy". An eddy can be thought of as typical turbulence pattern of small- and large- scales all co-existing in the same fluid. The eddies consists of vortexes intertwined in a chaotic manner, beeing streched by the mean flow and pulled in random directions by one another. This mechanism ultimately leads to braking of the eddies into smaller ones, leading to an "energy cascade"\cite{CFD}.\\
 \\
-The kinetic energy of the mean flow is extracted by the largest scale eddies. Energy from the largest eddies is further extracted to smaller scales, and the kinetic energy is finally dissipated into thermal energy by the small scale eddies(\textcolor{red}{need reference}).\\
+The kinetic energy of the mean flow is extracted by the largest scale eddies. Energy from the largest eddies is further extracted to smaller scales, and the kinetic energy is finally dissipated into thermal energy by the small scale eddies \cite{CFD}.\\
 \\
 The turbulent kinetic energy is defined by the units $\sim [m^2/s^2] \sim u_0^2$. As turbulence is dissipative, the dissipation rate has the units $[m^2/s^3]$. The dissipation rate of kinetic energy scales as $\epsilon \propto u_0^3/l_0$ \cite{Turbulence}, where $u_0$ and $l_0$ is the characteristic velocity and length of the flow.\\
 \\
@@ -236,11 +266,11 @@ At the layer where turbulent stresses dominates, called the log-layer, the veloc
 u^+ = \frac{1}{\kappa}\ln(y^+) + B
 \label{eqn:logLayer}
 \end{equation}
-The constant $\kappa$ and B is found by doing measurements. The log-layer lies outside the viscous sub-layer, at $30 < y^+ < 300$ \cite{CDF}.\\
+The constant $\kappa$ and B is found by doing measurements. The log-layer lies outside the viscous sub-layer, at $30 < y^+ < 300$ \cite{CFD}.\\
 \\
-Between the viscous sub-layer and the loq-layer lies the buffer layer, where the viscous and turbulent stresses are of similar magnitude.\\
+Between the viscous sub-layer and the log-layer lies the buffer layer, where the viscous and turbulent stresses are of similar magnitude.\\
 \\
-Equations for the viscous sub-layer and loq-layer (\ref{eqn:viscousSublayer} and  \ref{eqn:logLayer}) are usually called law of the wall and are of great importance in approximating and simulating turbulent boundary layers.\\
+Equations for the viscous sub-layer and log-layer (\ref{eqn:viscousSublayer} and  \ref{eqn:logLayer}) are usually called law of the wall and are of great importance in approximating and simulating turbulent boundary layers.\\
 \\
  
 \subsection{Computer modelling of turbulence}
@@ -293,11 +323,11 @@ where $P' = \big(P + \frac{2k}{3}\delta_{ij} \big)$ called the modified pressure
 \\
 To complete the closure of the RANS equations, the eddy viscosity term $\nu_t$ needs to be modelled. Dimensional analysis dictates that $\nu_t$ needs to be proportinal to the product of a characteristic velocity and a characteristic length scale \cite{Wilcox,AppliedMathematicalModelling}\\
 \\
-This paper is using two turbulence models for comparison, namely the two-equation models k-$\epsilon$ and the shear stress transport model k-$\omega$ SST.
-\subsubsection{k-$\boldsymbol{\epsilon}$ model}
-The standard k-$\epsilon$ model equations is found in a lot of litterature such as \cite{CFD} and \cite{UNIK4900}.\\
+This paper is using two turbulence models for comparison, namely the two-equation models k-$\epsilon$ and the shear stress transport model $k-\omega$ SST.
+\subsubsection{$\boldsymbol{k}-\boldsymbol{\epsilon}$ model}
+The standard $k-\epsilon$ model equations is found in a lot of litterature such as \cite{CFD} and \cite{UNIK4900}.\\
 \\
-The k-$\epsilon$ model is perhaps the most widely used, giving good results in classical shear flows. It does however have shortcomings in accurately predicting adverse pressure gradients and boundary layers. despite its shortcomings, the model is recommended in cases with multiphase problems by som literature, i.e \cite{AppliedMathematicalModelling}.\\
+The $k-\epsilon$ model is perhaps the most widely used, giving good results in classical shear flows. It does however have shortcomings in accurately predicting adverse pressure gradients and boundary layers. despite its shortcomings, the model is recommended in cases with multiphase problems by som literature, i.e \cite{AppliedMathematicalModelling}.\\
 \\ 
 The model equations are specified as follows:\\
 \\
@@ -317,10 +347,10 @@ Turbulence dissipation rate equation:
 \label{eqn:epsilonInKEpsilon}
 \end{equation}
 The model equations use the Boussinesq assumption given in equation (\ref{eqn:bossinesq}) and contains five adjustable constants: $C_{\mu}=0.09$, $\sigma_k=1.0$, $\sigma_{\epsilon}= 1.3$, $C_{\epsilon 1}=1.44$ and $C_{\epsilon 2}=1.92$
-\subsubsection{k-$\boldsymbol{\omega}$ SST}
-K-$\omega$ model is made by Menter \cite{SST} and is found in littarture and such as \cite{CFD} and \cite{Wilcox}.\\
+\subsubsection{$\boldsymbol{k}-\boldsymbol{\omega}$ SST}
+$k-\omega$ model is made by Menter \cite{SST} and is found in littarture and such as \cite{CFD} and \cite{Wilcox}.\\
 \\
-The k-$\omega$ SST turbulence model is a more advanced model which combines k-$\epsilon$ and k-$\omega$ models. The k-$\epsilon$ model has its shortcomings, as stated above. The $k-\omega$ model was made to better predict adverse pressure gradients and boundary layers, but preformed poorer at free streams. Menter \cite{reviewOfSSTModel} proposed a new model which combined the k-$\epsilon$ and the k-$\omega$ models. In litterature like \cite{CFD} it is stated that k-$\omega$ SST model is superior in approximating adverse pressure gradients and boundary layers.\\
+The $k-\omega$ SST turbulence model is a more advanced model which combines $k-\epsilon$ and $k-\omega$ models. The $k-\epsilon$ model has its shortcomings, as stated above. The $k-\omega$ model was made to better predict adverse pressure gradients and boundary layers, but preformed poorer at free streams. Menter \cite{reviewOfSSTModel} proposed a new model which combined the $k-\epsilon$ and the $k-\omega$ models. In litterature like \cite{CFD} it is stated that $k-\omega$ SST model is superior in approximating adverse pressure gradients and boundary layers.\\
 \\
 Turbulence resources such as \cite{NASA_SST} gives thurough desrcription of the model equations. The two-equation model is specified as follows:\\
 \\
@@ -603,7 +633,7 @@ ref{eqn:bossinesq}), and $p$ is the modified pressure and containes the kinetic 
 \section{Turbulence models}
 This paper is using the RANS method to approximate turbulence. In order to close the RANS equations, turbulence models are beeing used. Two different two-equation models are implemented for comparison.\\
 \\
-The turbulence models used in this paper are the k-$\omega$ SST and the k-$\epsilon$ turbulence model. In section Introduction to openFOAM \ref{sec:IntroductionToOpenFOAM}, the \textit{constant} directory shown in figure \ref{fig:caseStructure} contains the file \textit{turbulenceProperties}. Here it is defined what simulation type that is beeing used, i.e. RANS. It also specifies which turbulence model to use.
+The turbulence models used in this paper are the $k-\omega$ SST and the $k-\epsilon$ turbulence model. In section Introduction to openFOAM \ref{sec:IntroductionToOpenFOAM}, the \textit{constant} directory shown in figure \ref{fig:caseStructure} contains the file \textit{turbulenceProperties}. Here it is defined what simulation type that is beeing used, i.e. RANS. It also specifies which turbulence model to use.
 \section{Numerical schemes}
 Having defined the equations to be solved in in section \textit{TwoLiquidMixingFoam} (\ref{sec:TwoLiquidMixingFoam}), the way in which to discretize the equations are defined in the file \textit{fvSchemes} found in figure \ref{fig:caseStructure}. The file consists of sub-dictionaries with name corresponding to terms within the equations given in section \textit{TwoLiquidMixingFoam} (\ref{sec:TwoLiquidMixingFoam}). For each term a numerical scheme must be specified.\\
 \\
@@ -890,7 +920,7 @@ Three mesh grids has been systematically refined to evaluate grid convergence. I
 \\
 Two speeds at two different pycnocline depths are used to check for convergence, resulting in  four tests. For each pycnocline depth, two velocities gives  densimetric Froude number corresponding to near-peak drag coefficient and densimetric Froude number close to super critical.\\
 \\
-Figure \ref{fig:convTestIf01U01} and \ref{fig:convTestIf01U022} are showing test runs with pycnocline located at $0.1$m ($h/D = 1$) below the barge and with $Fr_h = 0.86$ and $Fr_h = 1.35$ respectively. Turbulence model used in the tests are the k-$\omega$ SST. The tests show that there is not much difference between the medium and fine grids, while the corse grid is oscillating around a value of $C_d$ i.e. it has not converged.\\
+Figure \ref{fig:convTestIf01U01} and \ref{fig:convTestIf01U022} are showing test runs with pycnocline located at $0.1$m ($h/D = 1$) below the barge and with $Fr_h = 0.86$ and $Fr_h = 1.35$ respectively. Turbulence model used in the tests are the $k-\omega$ SST. The tests show that there is not much difference between the medium and fine grids, while the corse grid is oscillating around a value of $C_d$ i.e. it has not converged.\\
 \\
 Table \ref{tbl:YplussValuesConvergenceTest1} shows the avarage $y^+$ values obtained from the convergence tests. The $y^+$ values lies all within the buffer layer, suggesting that the Wall functions must be applicable for a wide range of $y^+$ values.
 \begin{table}[H]
@@ -925,7 +955,7 @@ Table \ref{tbl:YplussValuesConvergenceTest1} shows the avarage $y^+$ values obta
 \end{minipage}\hfill
 \vspace{2ex}\\
 \\
-Figure \ref{fig:convTestIf02U016} and \ref{fig:convTestIf02U022} are showing test runs with pycnocline located at $0.2$m ($h/D=2$) below the barge and with $Fr_h = 0.61$ and $Fr_h = 0.95$ respectively. Turbulence model used in the tests are the k-$\omega$ SST. The tests show the same trends as the tests done with pycnocline located $0.1$m below the barge.\\
+Figure \ref{fig:convTestIf02U016} and \ref{fig:convTestIf02U022} are showing test runs with pycnocline located at $0.2$m ($h/D=2$) below the barge and with $Fr_h = 0.61$ and $Fr_h = 0.95$ respectively. Turbulence model used in the tests are the $k-\omega$ SST. The tests show the same trends as the tests done with pycnocline located $0.1$m below the barge.\\
 \\
 Table \ref{tbl:YplussValuesConvergenceTest2} shows the avarage $y^+$ values obtained from the convergence tests with pycnocline located at $0.2$m below the barge. The $y^+$ values lies all within the buffer layer, suggesting that the Wall functions must estimate the whole turbulent boundary region
 \begin{table}[H]
@@ -968,13 +998,13 @@ Comparison of the turbulence models was done by running numerical experiments wi
 \\
 The comparison is done by checking convergence of the $C_d$ for the two cases. The motivation for comparing the $C_d$ and not any other parameters is that of the main scope of this project, investigating the increase in $C_d$ in the range of $0.6\leq Fr_h \leq 0.8$ in stratified fluids. It is essential to have a turbulence model that best approximate the $C_d$ \\
 \\
-The first test is shown in figure \ref{fig:turbulenceModelComparison1}. From the figure it is shown that the turbulence model k-$\omega$ SST gives a good convergence of the $C_d$. The model k-$\epsilon$ on the other hand sees an increace of $C_d$ throughout the entire expriment and gets even more unstable as time increases.\\
+The first test is shown in figure \ref{fig:turbulenceModelComparison1}. From the figure it is shown that the turbulence model $k-\omega$ SST gives a good convergence of the $C_d$. The model $k-\epsilon$ on the other hand sees an increace of $C_d$ throughout the entire expriment and gets even more unstable as time increases.\\
 \\
-THe second test is shown in figure \ref{fig:turbulenceModelComparison2}, and is showing the same trend as seen in the first test. K-$\omega$ SST gives a good convergence, while k-$\epsilon$ gets an increase in $C_d$ as time increases. In the second test, k-$\epsilon$ even starts to oscillate as the time increases.\\
+THe second test is shown in figure \ref{fig:turbulenceModelComparison2}, and is showing the same trend as seen in the first test. $k-\omega$ SST gives a good convergence, while $k-\epsilon$ gets an increase in $C_d$ as time increases. In the second test, $k-\epsilon$ even starts to oscillate as the time increases.\\
 \\
-From the tests it is concluded that k-$\omega$ SST model is the most reliable investigating the "dead water" phenomenon going further.\\
+From the tests it is concluded that $k-\omega$ SST model is the most reliable investigating the "dead water" phenomenon going further.\\
 \\
-Even though the theory states that the k-$\omega$ turbulence model yields better results when simulating adverse pressure gradients and boundary layer \cite{CFD}, it serves a purpose to compare with other models. As stated in theory, the k-$\epsilon$ model can get reliable results when simulating multiphase fluids. The comparison of the models only confirms the theory that the k-$\omega$ SST model is superior in estimating boundary layers and adverse pressure gradients.\\
+Even though the theory states that the $k-\omega$ turbulence model yields better results when simulating adverse pressure gradients and boundary layer \cite{CFD}, it serves a purpose to compare with other models. As stated in theory, the $k-\epsilon$ model can get reliable results when simulating multiphase fluids. The comparison of the models only confirms the theory that the $k-\omega$ SST model is superior in estimating boundary layers and adverse pressure gradients.\\
 \\
 \begin{minipage}[t]{.45\textwidth}
 	\begin{figure}[H]
@@ -995,45 +1025,69 @@ Even though the theory states that the k-$\omega$ turbulence model yields better
 \end{minipage}\hfill
 %\vspace{2ex}
 
-\section{internal wave}
-
 \section{Drag}
-At critical densimetric froude numbers, the drag increases. The reason for the increase in drag is because we get a crest of the internal wave at the stern of the barge. The crest restricts the passage area and accelerates the flow. This in turn results in a lower pressure in the stern of the ship. We get both a higher friction drag, and the lower pressure for the stratified case increases the pressure drag. In total we get an increase in the stratified case.\\
-\\ 
-Key points to include:
-\begin{itemize}
-	\item crest at stern of barge
-	\item increase of velocity because of restriction of passage area
-	\item results in thinner boundary layer, thus hicgher friction.
-	\item also results in decrease of the pressure, such that total drag coefficient increses
-\end{itemize}
-
+\subsection{Non-stratified fluid}
+Non-stratified fluid simulations was conducted by simulating with a density corresponding to fresh water and with barge draft $D=0.1$m at speeds $0.06$m$s^{-1}$ $\leq$ $U$ $\leq$ $0.24$m$s^{-1}$. \\
+\\
+Gou et.al conducted the same experiment in a towing tank, with the same dimensions on the barge. Their results showed that drag force is directly proportianal to the square of the towing speed, which means that the $C_d$ is constant.\\
+\\
+In figure \ref{fig:dragForce} results of the non-stratified fluid simulations is shown along with the results obtained by Gou et.al. \cite{Gou}. The figure is showing drag force as function of the velocity squared. Similar to the results by Gou et. al, this paper is getting a linear curve, meaning the non-stratified flow has a constant $C_d$ for all speeds.\\
+\\
+The current study underpredicts the drag force obtained by Gou et.al. by $\approx 20\%$. There may be sevaral reasons for the under-prediction of drag. Reason one beeing that the Gou et.al study did experiments in a shallow water tank, while this simulation domain is much larger. Another reason is the approach of not including what is above water line and excluding the free surface.\\
+\\
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/Gou2KOSpaldingRefType2kLowRe.png}
-	\caption{Drag force as function of velocity squared. \\ \textit{Resistance in homogeneous fluid with barge draft $=0.1$. Simulations is in good agreement with experimental data obtained on an identical barge done by Gou et. al. \cite{Gou} with a deviance of $\approx 20$ \%. Resistance is directly proportianal to the square of the towing speed, which means that the drag coefficient is constant. }}
+	\includegraphics[width=0.75\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/Gou2KOSpaldingRefType2kLowRe.png}
+	\caption{Drag force as function of velocity squared. \\ \textit{Resistance in homogeneous fluid with barge draft $=0.1$. Simulations is in good agreement with experimental data obtained on an identical barge done by Gou et. al. \cite{Gou} with a deviance of $\approx 20$ \%. Drag force is directly proportianal to the square of the towing speed, which means that the $C_d$ is constant. }}
 	\label{fig:dragForce}
 \end{figure}
-
-\begin{minipage}[t]{.45\textwidth}
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/esmaeilpourSpaldingRefType2kLowRe.png}
-		\caption{Drag coefficient as function of densimetric Froude number $Fr_h$  \\ \textit{Drag coefficients ($C_d$) obtained by running simulations with $h/D=1$, $1.5$ and $2$. $C_d$ peaks within a range of $Fr_h = 0.6$ and $0.8$. $C_d$ tends towards simulations of non-stratified fluid for all pycnocline locations when $Fr_h \leq 0.6$ and $Fr_h \geq 0.8$.}}
-		\label{fig:Cd}
-	\end{figure}
-\end{minipage}\hfill
-\vspace{2ex}
-\begin{minipage}[t]{.45\textwidth} 
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/esmaeilpourSpaldingRefType2kLowRePercentage.png}
-		\caption{Drag coefficient as function of densimetric Froude number.  \\ \textit{Drag coefficients ($C_d$) obtained by running simulations with different interface height. $C_d$ peaks within a range of $Fr_h = 0.6$ and $0.8$. For all interface hights there is the same trend that $C_d$ tends towards simulations of homogeneous fliud (single phase) as densimetric Froude number $Fr_h \leq 0.6$ and $Fr_h \geq 0.8$.}}
-		\label{fig:CdPercentageDifference}
-	\end{figure}
-\end{minipage}\hfill
-\vspace{2ex}
-
+\subsection{Stratified fluids}
+Study of the behaviour of $C_d$ in a stratified fluid is conducted by simulating with barge draft $D=0.1$ and pycnocline depths $h/D=1$, $1.5$ and $2$. All three set ups are then simulated with speeds corresponding to densimetric Froude numbers (\ref{eqn:densimetricFroudeNumber}) in the range of $0.35\leq Fr_h \leq 1.35$\\
+\\
+The $C_d$ shown in figure \ref{fig:Cd} offers a lot of information. A clear pattern of increasing $C_d$ is shown for all three pycnocline depths. All $C_d$ peaks are found within the range of $0.6 \leq Fr_h \leq 0.7$, with pycnocline depth $h/D=1$ giving the largest $C_d$. All three set-ups are giving the same pattern in $C_d$ of increasing as $Fr_h$ approaches peak $C_d$ and then decrasing again and tending towards non-stratified fluids.\\
+\\
+Similar trends are presented in the study done by Esmaeilpour et. al. \cite{Esmaeilpour} who are doing computational fluid dynamics study on a vessel sailing in stratified waters.  Esmaeilpour et. al. had peaks between $Fr_h=0.83$ and $Fr_h=0.91$, which is in a range a bit higher than peaks presented in this study.\\
+\\
+Esmaeilpour et.al. is also reporting a much more significant increase in $C_d$ than is obtained in this report. The peak $C_d$ for a pycnocline depth of $h/D=1$ has an increace of $600\%$.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/esmaeilpourSpaldingRefType2kLowRe.png}
+	\caption{Drag coefficient as function of $Fr_h$  \\ \textit{Drag coefficients ($C_d$) obtained by running simulations with pycnocline depth $h/D=1$, $1.5$ and $2$. $C_d$ peaks within a range of $Fr_h = 0.6$ and $0.8$. $C_d$ tends towards simulations of non-stratified fluid for all pycnocline locations when $Fr_h \leq 0.6$ and $Fr_h \geq 0.8$.}}
+	\label{fig:Cd}
+\end{figure}
+Percentage increace of $C_d$ is presented in figure \ref{fig:CdPercentageDifference}, and it show that for pycnocline depth $h/D=1$ has a percentage increase of $21\%$. Looking at $h/D=1.5$ there is an increase of $13.5\%$, while Esmaeilpour et.al has an increase of $450\%$ for the same pycnocline.\\
+\\
+Looking into the large difference in the increase of $C_d$, the question arises of the exclusion of the free-surface. The effects of the free-surface might be to significant in stratified waters to leave out the free surface. Another key difference in the approach done by Esmaeilpour et.al. is the number of grids. The study was conducted with a grid consisting of $21.9\times 10^6$ cells, to properly resolve boundary layer and internal wave appearing at the pycnocline.\\
+\\
+Despite of the small amount of increase in $C_d$ obtained from the simulations, the effect of the stratified fluid is clearly apparent. The increase in drag appears in the same manner presented in Gou et.al. \cite{Gou}. It is also in accordance with the findings in the study of FRAM's dead water resistance conducted by Grue \cite{Grue}. Grue 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/esmaeilpourSpaldingRefType2kLowRePercentage.png}
+	\caption{Percentage increase as function $Fr_h$.  \\ \textit{Percentage difference between stratified and non stratified fliuds. Pycnocline depth of  $h/D=2$ gives a peak difference of $8.5\%$. $h/D=15$m gives peak difference of $13.5\%$ and $h/D=1$ gives peak difference of $21\%$}}
+	\label{fig:CdPercentageDifference}
+\end{figure}
+\section{Internal wave and its effect}
+Any kind of vessel propagating in stratified fluids experience increase in drag compared to non-stratified fluid. As the barge propagates in the stratified fluid, internal waves appear below the barge. The numerical experiments is cathing this phenomeneon, and it is clearly an internal wave below the barge.\\
+\\
+\subsection{Vizualization of the internal wave}
+Figure \ref{fig:velocityAndPycnoclineIf02U016Test} is a visualization of the internal wave below the barge. It is showing a contour of the $\alpha$ fraction for a pycnocline depth $h/D=2$, and a non dimensionalized x-direction velocity located at the symmetry plane. The figure is showing a wave pattern, but the figure is only giving empirical evidence of the internal wave. The figure is a useful tool for visualizing the phenomenon. 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/paraView/velocityAndNormalsZ/VelocityAndPycnoclineNormalsZIf02U016Test.png}
+	\caption{Contour of $\alpha$ below the barge \\ \textit{Contour of the value fraction $\alpha$ at the pycnocline depth $h/D=2$. An internal wave appears below the barge. The non dimensional velocity $U_x/U_{0x}$ is shown in the symmetryplane of the domain.}}
+	\label{fig:velocityAndPycnoclineIf02U016Test}
+\end{figure}
+\subsection{Wave location and effect on velocity}
+The densimetric Froude number (\ref{eqn:densimetricFroudeNumber}) is a ratio of the velocity of the barge and the celerity of the longest internal waves. As $Fr_h$ increases, the largest crest of the internal wave is going to be located at further and furter back towards the stern of the barge, and eventually be behind it.\\
+\\
+Figure \ref{fig:eta1} is showing the location of the pycnocline as a function of it position below the barge. The three cases shown in the figure corresponds to $Fr_h$ where $C_d$ starts to increase, $Fr_h$ at peak $C_d$ and $Fr_h$ where $C_d$ has decreased and almost reached a non-stratified $C_d$.\\
+\\
+The location of the internal wave corresponding to peak $C_d$ is almost right at the stern of the barge.\\
+\\
+Figure \ref{fig:velocityProfileX0}, is showing non-dimensional velocity profiles scaled by the far field velocity. The velocity profile corresponding to the internal wave closest to the stern of the barge experiences an increase in velocity as it approches the stern. This in turn makes the pressure dop at the stern, causing an increase in $C_d$. It is also causing a grater velocity gradient, which in turn increases the friction resistance, an causing $C_d$ to increase.\\
+\\
+The Reason for the sudden increase of the velocity at the stern is caused by the restriction of passage area by the internal wave.\\
+\\ 
 \begin{minipage}[t]{.45\textwidth} 
 	\begin{figure}[H]
 		\centering
@@ -1051,23 +1105,59 @@ Key points to include:
 		\label{fig:velocityProfileX0}
 	\end{figure}
 \end{minipage}\hfill
+\vspace{2ex}\\
+\\
+Pycnocline depth $h/D=1.5$ is telling the same story as for pycnocline depth $h/D=2$. Looking at figure \ref{fig:eta2} and figure \ref{fig:velocityProfileX0If15}, the internal wave located below the stern of the barge corresponding to peak $C_d$ is causing the increace in velocity\\
+\\
+\begin{minipage}[t]{.45\textwidth} 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/Surface15.png}
+		\caption{Pycnocline as a function of x-position. \\ \textit{Pycnocline below the barge at the symmetry plane as a function of x-position. Initially $h/D=2$. As $Fr_h$ increases, wave amplitude increase and the crest located further back. Location of crest has significant effect on flow field as shown in figure \ref{fig:velocityProfileX0If15}. The internal wave restricts the passage area, causing a significant increase in speed. This effects on $C_d$ are shown in figure \ref{fig:Cd}.}}
+		\label{fig:eta2}
+	\end{figure}
+\end{minipage}\hfill
+\vspace{2ex}
+\begin{minipage}[t]{.45\textwidth}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/VelocityProfileX0IF15.png}
+		\caption{velocity profiles $U_x/U_0$ as function of z-position. \\ \textit{Dimensionlesss velocity profiles $U_x/U_0$ below barge at $x = 0.0$m with pycnocline at $0.2$m. The velocity profile with $Fr_h = 0.69$ has a signifiant increase in speed and greater gradient.}}
+		\label{fig:velocityProfileX0If15}
+	\end{figure}
+\end{minipage}\hfill
 \vspace{2ex}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.75\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/paraView/velocityAndNormalsZ/VelocityAndPycnoclineNormalsZIf02U016Test.png}
-	\caption{ \\ \textit{}}
-	\label{fig:velocityAndPycnoclineIf02U016Test}
-\end{figure}
+
 
 \chapter{Conclusions and further recommendations}
 
 \begin{thebibliography}{9}
+	\bibitem{Nansen}
+	F. Nansen\\
+	Farthest North, Westminster: Archibald Constable and Company\\
+	2 Whitehall Gardens, 1897. Vol 1.
+	
+	\bibitem{Ekman}
+	V.W. Ekman\\
+	On dead-water in The Norwegian North Polar Expidition 1893-1896. Scientific Results.\\
+	Edited by F. Nansen (Brogger, christiania, 1904)	
+	
 	\bibitem{Gou} 
 	Y. Guo, W. Xu, X. Xinwei, and B. Teng,\\
 	Experiment study on the towing resistance of a barge in a
 two-layer fluid.\\
 	In The 32nd International Workshop on Water Waves and Floating Bodies, 2017.
+	
+	\bibitem{Esmaeilpour} 
+	Mehdi Esmaeilpour, J. Ezequiel Martin, Pablo M. Carrica\\
+	Computational Fluid Dynamics Study of the Dead Water Problem\\
+	Journal of Fluids Engineering, October, 2017.
+	
+	\bibitem{Grue}
+	John Grue\\
+	calculating FRAM's dead water\\
+	Springer Verlag, 2018
 	
 	\bibitem{AppliedMathematicalModelling} 
 	C.D. Argyropoulos, N.C. Markatos, (2015).
