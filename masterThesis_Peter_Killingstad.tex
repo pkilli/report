@@ -266,12 +266,20 @@ At the layer where turbulent stresses dominates, called the log-layer, the veloc
 u^+ = \frac{1}{\kappa}\ln(y^+) + B
 \label{eqn:logLayer}
 \end{equation}
-The constant $\kappa$ and B is found by doing measurements. The log-layer lies outside the viscous sub-layer, at $30 < y^+ < 300$ \cite{CFD}.\\
+The constants $\kappa = 0.41$  and $B= 5.5$ is found by doing measurements. The log-layer lies outside the viscous sub-layer, at $30 < y^+ < 300$ \cite{CFD}.\\
 \\
 Between the viscous sub-layer and the log-layer lies the buffer layer, where the viscous and turbulent stresses are of similar magnitude.\\
 \\
 Equations for the viscous sub-layer and log-layer (\ref{eqn:viscousSublayer} and  \ref{eqn:logLayer}) are usually called law of the wall and are of great importance in approximating and simulating turbulent boundary layers.\\
 \\
+Figure \ref{fig:lawOfTheWall} is showing a plot containing the viscous sub-layer and the log-layer
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.70\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/turbulenceModelComparison/lawOfTheWall.png}
+	\caption{Law of the wall\\ \textit{law of the wall; Viscous sub-layer in blue in the range $y^+ < 5$ and log-layer given in green in the range $30 \leq y^+ \leq 300$. Inbetween the viscous sub-layer and log-layer lies the buffer layer. Outer region lies where $y^+ > 300$}}
+	\label{fig:lawOfTheWall}
+\end{figure}
+
  
 \subsection{Computer modelling of turbulence}
 The modelling of turbulent fluid flows and the Navier-Stokes equations has seen huge advancements as computer speed increases. The number of applications of fluid flow predictions has grown and computerized analysis has become a crucial part in the field of fliud mechanics.\\
@@ -1128,10 +1136,19 @@ Pycnocline depth $h/D=1.5$ is telling the same story as for pycnocline depth $h/
 \end{minipage}\hfill
 \vspace{2ex}
 
-
-
 \chapter{Conclusions and further recommendations}
-
+Computational fluid dynamics has been used to investigate drag resistance on a barge in stratified and non-stratified waters. The free open source software OpenFOAM has been used to get a qualitative understanding and for comparison of stratified and non-stratified fluid flow. \\
+\\
+Simulations of a non-stratified fluid showed results with similar behaviour as obtained by Gou et al. \cite{Gou}. The non stratified fluid simulations was shown to have a constant $C_d$, and to have a drag force directly proportional to the square of the simulation speed. Non-stratified simulations yielded rusults with a deviance of $\approx 20\%$ compared to results from gou et al.\\
+\\
+Simulations of stratified showed similar behaviour as Gou et al \cite{Gou}, J. Grue \cite{Grue} and Esmaeilpour \cite{Esmaeilpour}.  increase in $C_d$ is shown as all simulations approached densimetric Froude number in regions of $0.35 \leq Fr_h \leq 0.6$. Peak $C_d$ was found in regions $0.6 \leq Fr_h \leq 0.7$ and decrease for $fr_h > 0.7$ with $C_d$ tending towards non-stratified simulations as $Fr_h$ increased. The same trend was shown for all pycnocline depths $h/D=1$, $1.5$ and $2$. Gou et al. reported peak in regions $0.5 \leq Fr_h \leq 0.6$, while Esmaeilour et al. reported peaks in regions $0.83\leq Fr_h \leq 0.93$, much closer to critical $Fr_h$.\\
+\\
+The increase in drag was found to be much smaller than similar studies of stratified fluid, with a maximum increase of $21\%$ in $C_d$ compared to a non-stratified fluid. Esmaeilpour reported a maximum increase in $C_d$ of $600\%$. The reason for the under-estimation of drag may be the exclusion of the free surface. It is also highly likely to be due to insufficient number of grid points, as Esmaeilpour had $20 \times$ more grid points compared to this study.\\
+\\
+The internal gravity waves and its location below the barge were found to have significant effect on the velocity profile. The increase in speed is caused by the restriction of passage area by the internal wave, giving a greater velocity gradient if the wave amplitude is located below the barge. The waves corresponding to the peak $C_d$ caused a significant increase in the velocity at the stern, causing a lower pressure in addition the greater velocity gradient. \\
+\\
+A comparison of the RANS turbulence models $k-\epsilon$ and $k-\omega$ SST has been conducted. The comparison consists of convergence tests of the drag coefficients $C_d$ on the barge with draft $D=0.1$m and a pycnocline depth $h/D=2$.  $k-\omega$ SST model was suspected to give the best results, which was shown. The $k-\omega$ SST model had good convergence and gave stable results, while the $k-\epsilon$ was found to be unstable, not cenverging and even giving oscillating $C_d$ for simulations with densimetric Froude number $Fr_h= 0.95$.\\
+\\
 \begin{thebibliography}{9}
 	\bibitem{Nansen}
 	F. Nansen\\
