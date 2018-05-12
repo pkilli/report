@@ -99,13 +99,15 @@
 \begin{document}
 \masterfrontpage
 \begin{abstract}
- write a short abstract here
+Computational fluid dynamics, with the software OpenFOAM, has ben used to investigate the dead water phenomenon. Investigation was done by simulating a barge moving in stratified waters. Comparison of the turbulence models $k-\epsilon$ and $k-\omega$ SST has been conducted, resulting in a better performance in estimating drag by the $k-\omega$ SST model. Simulations of the barge moving in stratified fluid is shown to generate internal gravity waves below and in the wake of the barge. The internal gravity waves causes the barge to experience an increase in drag for subcritical densimetric Froude numbers ($Fr_h$). Maximum drag is shown to appear in regions of $0.6 \leq Fr_h \leq 0.7$. Internal waves restricts the passage area causing an acceleration of the flow downstream of the barge, resulting in thinning of boundary layer and drop in pressure.
 \end{abstract}
+\chapter*{Acnowledgements}
+
 \tableofcontents
 
 \chapter{Introduction}
 \pagenumbering{arabic} % Switch to normal numbers
-Dead water is the phenomenon where internal waves are causing boats or vessels, moving along the surface of a stratified fluid, to experience increased drag force. A stratified fluid can be observed in the ocean where layers have different salinity, or temperature jumps, causing a difference in density. Rapidly melting glaciers can cause a layer of fresh water on top of denser ocean salt water, or a layer of warmer ocean currents can be lying on top of colder currents. The internal gravity waves occurs where the maximum vertical density gradient is located, called the pycnocline.\\
+Dead water is the phenomenon where internal gravity waves are causing boats or vessels, moving along the surface of a stratified fluid, to experience increased drag force. A stratified fluid can be observed in the ocean where layers have different salinity, or temperature jumps, causing a difference in density. Rapidly melting glaciers can cause a layer of fresh water on top of denser ocean salt water, or a layer of warmer ocean currents can be lying on top of colder currents. The internal gravity waves occurs where the maximum vertical density gradient is located, called the pycnocline.\\
 \\
 The Norwegian scientist and explorer Fridtjof Nansen was the first to describe the phenomenon \citep{Nansen}. During the FRAM expidition while passing north of Sibira, his boat FRAM experienced a reduction in speed to about a fifth part, even though the engine was working on full power. As the speed was reduced, F. Nansen described internal waves accross the wake, arising sometimes as far as almost midships. Ekman later conducted the first experimental study on the phenomenon\cite{Ekman}, by using a towing tank with stratified water conditions. The study concluded that the model experienced an increase in drag force due to the internal waves.\\
 \\
@@ -429,10 +431,10 @@ where the subscript $i$ denotes the $i$'th fluid in a system.\\
 \\
 For miscible fluids the volume fractions are governed by the advection-diffusion equation given as \citep{VOF1}
 \begin{equation}
-\frac{\partial \alpha_i}{\partial t} + \nabla \cdot (\alpha \mathbf{u}) = D\nabla^2 \alpha,
+\frac{\partial \alpha_i}{\partial t} + \nabla \cdot (\alpha \mathbf{u}) = D_{ab}\nabla^2 \alpha,
 \label{eqn:alphadiffusionEquation}
 \end{equation} 
-Where D denotes diffusivity between miscible fluids. The following constraint must be satisfied due to mass conservation:
+Where $D_{ab}$ denotes diffusivity between miscible fluids. The following constraint must be satisfied due to mass conservation:
 \begin{equation}
 \Sigma_{i=1}^n \alpha_i= 1
 \label{eqn:alphaConstraint} 
@@ -611,7 +613,7 @@ Many multiphase solvers can be found, both miscible and immiscible. This thesis 
 \\
 Three equations are beeing solved. The first equation is the alpha diffusion equation, given by \cite{Krpan}
 \begin{equation}
-\frac{\partial \alpha_1}{\partial t} + \nabla \cdot (\mathbf{U} \alpha_1) = \nabla \cdot \Big(\big(D + \frac{\nu_t}{S_C}  \big)\nabla \alpha_1 \Big) 
+\frac{\partial \alpha_1}{\partial t} + \nabla \cdot (\mathbf{U} \alpha_1) = \nabla \cdot \Big(\big(D_{ab} + \frac{\nu_t}{S_C}  \big)\nabla \alpha_1 \Big) 
 \label{eqn:alphaEqTLMF}
 \end{equation}
 where
@@ -619,7 +621,7 @@ where
 	\item $\alpha_1$ is the volume fraction.
 	\item $\alpha_2 = 1 - \alpha_1$	
 	\item $\rho = \alpha_1 \rho_1 + \alpha_2 \rho_2 = \alpha_1\rho_1 + (1 - \alpha_1)\rho_2$.
-	\item D is the molecular diffusivity.
+	\item $D_{ab}$ is the molecular diffusivity.
 	\item $\nu_t$ is the turbulent eddy viscosity.
 	\item $s_c$ is the Schmidt number, given as $\mu / (\rho D)$.
 \end{itemize}
@@ -709,7 +711,7 @@ Figure \ref{fig:experiment} is showing a schematic overview of the numerical exp
 \\
 The experiments are done with a moving reference frame, rather than having the barge moving, in order to be able to run simulations sufficiently long.\\
 \\
-The densities of the fluids are set to $997$ kg m$^{-3}$ for fresh water and $1024$ kg m$^{-3}$ for salt water. Kinematic viscosity is set to $\nu = 1.79 \cdot 10^{-6} m^2 s^{-1}$ corresponding to waters at $0^{\circ}$C. The speed  varies as $0.08\leq U \leq 0.22$ corresponding to Reynolds number (\ref{eqn:ReynoldsNumber}) $26815 \leq Re \leq 73743$.\\
+The densities of the fluids are set to $997$ kg m$^{-3}$ for fresh water and $1024$ kg m$^{-3}$ for salt water. Kinematic viscosity is set to $\nu = 1.79 \cdot 10^{-6} m^2 s^{-1}$ corresponding to waters at $0^{\circ}$C. Molecular difusivity used is $2.0 \cdot 10^{-5}$. The speed  varies as $0.08\leq U \leq 0.22$ corresponding to Reynolds number (\ref{eqn:ReynoldsNumber}) $26815 \leq Re \leq 73743$.\\
 \\
 
 \begin{figure}[H]
@@ -730,7 +732,7 @@ The densities of the fluids are set to $997$ kg m$^{-3}$ for fresh water and $10
         every rectangle node/.style={fill=white,midway,font=\sffamily}},
     ]
     % Round rectangle
-    \fill[gray!10,rounded corners] (-6,-3) rectangle (6,0);
+    \fill[gray!30,rounded corners] (-6,-3) rectangle (6,0);
     % Interface
     \draw[blue,line width=.5pt,interface](-6,0)--(6,0);
     % barge
@@ -1088,19 +1090,18 @@ Figure \ref{fig:velocityAndPycnoclineIf02U016Test} is a visualization of the int
 \subsection{Wave location and effect on velocity}
 The densimetric Froude number (\ref{eqn:densimetricFroudeNumber}) is a ratio of the velocity of the barge and the celerity of the longest internal waves. As $Fr_h$ increases, the largest crest of the internal wave is going to be located at further and furter back towards the stern of the barge, and eventually be behind it.\\
 \\
-Figure \ref{fig:eta1} is showing the location of the pycnocline as a function of it position below the barge. The three cases shown in the figure corresponds to $Fr_h$ where $C_d$ starts to increase, $Fr_h$ at peak $C_d$ and $Fr_h$ where $C_d$ has decreased and almost reached a non-stratified $C_d$.\\
+Figure \ref{fig:eta1} is showing the location of the pycnocline as a function of it position below the barge. The three cases shown in the figure corresponds to $Fr_h$ where $C_d$ starts to increase, $Fr_h$ at peak $C_d$ and $Fr_h$ where $C_d$ has decreased and almost reached a $C_d$ obtained by non-stratified simulations.\\
 \\
-The location of the internal wave corresponding to peak $C_d$ is almost right at the stern of the barge.\\
+The location of the internal wave corresponding to peak $C_d$ is located in the wake and almost right below the stern of the barge. The internal waves are causing restriction of passage area, and the flow is accelerated. Acceleration of the fluid flow is thinning the boundary layer and causing a drop in pressure.\\
 \\
-Figure \ref{fig:velocityProfileX0}, is showing non-dimensional velocity profiles scaled by the far field velocity. The velocity profile corresponding to the internal wave closest to the stern of the barge experiences an increase in velocity as it approches the stern. This in turn makes the pressure dop at the stern, causing an increase in $C_d$. It is also causing a grater velocity gradient, which in turn increases the friction resistance, an causing $C_d$ to increase.\\
+Figure \ref{fig:velocityProfileX0}, is showing non-dimensional velocity profiles scaled by the far field velocity. The velocity profile corresponding to the internal wave located below the stern of the barge shows increase in velocity as it approches the stern. This in turn makes the pressure dop and a thinning of the boundary layer, causing an increase in $C_d$.\\
+\\Pycnocline depth $h/D=1.5$ is telling the same story as for pycnocline depth $h/D=2$. Looking at figure \ref{fig:eta2} and figure \ref{fig:velocityProfileX0If15}, the internal wave located below the stern of the barge corresponding to peak $C_d$ is causing the increace in velocity\\
 \\
-The Reason for the sudden increase of the velocity at the stern is caused by the restriction of passage area by the internal wave.\\
-\\ 
 \begin{minipage}[t]{.45\textwidth} 
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/Surface.png}
-		\caption{Pycnocline as a function of x-position. \\ \textit{Pycnocline below the barge at the symmetry plane as a function of x-position. Initially $h/D=2$. As $Fr_h$ increases, wave amplitude increase and the crest located further back. Location of crest has significant effect on flow field as shown in figure \ref{fig:velocityProfileX0}. The internal wave restricts the passage area, causing a significant increase in speed. This effects on $C_d$ are shown in figure \ref{fig:Cd}.}}
+		\caption{Pycnocline as a function of x-position. \\ \textit{Initial pycnocline depth $h/D=2$. As $Fr_h$ increases, wave amplitude increase and the crest located further back. Location of crest has significant effect on flow field as shown in figure \ref{fig:velocityProfileX0}. The internal wave restricts the passage area, causing a significant increase in speed. This effects on $C_d$ are shown in figure \ref{fig:Cd}.}}
 		\label{fig:eta1}
 	\end{figure}
 \end{minipage}\hfill
@@ -1113,15 +1114,12 @@ The Reason for the sudden increase of the velocity at the stern is caused by the
 		\label{fig:velocityProfileX0}
 	\end{figure}
 \end{minipage}\hfill
-\vspace{2ex}\\
-\\
-Pycnocline depth $h/D=1.5$ is telling the same story as for pycnocline depth $h/D=2$. Looking at figure \ref{fig:eta2} and figure \ref{fig:velocityProfileX0If15}, the internal wave located below the stern of the barge corresponding to peak $C_d$ is causing the increace in velocity\\
-\\
+\vspace{2ex}
 \begin{minipage}[t]{.45\textwidth} 
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/Surface15.png}
-		\caption{Pycnocline as a function of x-position. \\ \textit{Pycnocline below the barge at the symmetry plane as a function of x-position. Initially $h/D=2$. As $Fr_h$ increases, wave amplitude increase and the crest located further back. Location of crest has significant effect on flow field as shown in figure \ref{fig:velocityProfileX0If15}. The internal wave restricts the passage area, causing a significant increase in speed. This effects on $C_d$ are shown in figure \ref{fig:Cd}.}}
+		\caption{Pycnocline as a function of x-position. \\ \textit{Initial pycnocline depth $h/D=2$. As $Fr_h$ increases, wave amplitude increase and the crest located further back. Location of crest has significant effect on flow field as shown in figure \ref{fig:velocityProfileX0If15}. The internal wave restricts the passage area, causing a significant increase in speed. This effects on $C_d$ are shown in figure \ref{fig:Cd}.}}
 		\label{fig:eta2}
 	\end{figure}
 \end{minipage}\hfill
@@ -1134,11 +1132,34 @@ Pycnocline depth $h/D=1.5$ is telling the same story as for pycnocline depth $h/
 		\label{fig:velocityProfileX0If15}
 	\end{figure}
 \end{minipage}\hfill
+\vspace{2ex}\\
+\\
+Looking at velocity profiles midships at $x=0.30$m in figur \ref{fig:velocityProfileX2If15} and \ref{fig:velocityProfileX2If15}, it is clearly an acceleration of the flow caused by the wave also located midships. Since the wave is located midships, it is not effecting $C_d$ as much as the one located at the stern. A pressure drop midship below the barge is not as significant as one located at the stern.
+\\
+\\
+\begin{minipage}[t]{.45\textwidth} 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/VelocityProfileX2.png}
+		\caption{velocity profiles $U_x/U_0$ as function of z-position. \\ \textit{Dimensionlesss velocity profiles $U_x/U_0$ below barge at $x = 0.3$m with pycnocline at $0.2$m. The velocity profile with $Fr_h = 0.35$ has a signifiant increase in speed and greater gradient, as the amplitude of the internal wave is located near the same location.}}
+		\label{fig:velocityProfileX2If2}
+	\end{figure}
+\end{minipage}\hfill
+\vspace{2ex}
+\begin{minipage}[t]{.45\textwidth}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.99\textwidth]{/home/peterek/OpenFOAM/PETER-5.0/MT_PK/plots/3Dtop/VelocityProfileX2IF15.png}
+		\caption{velocity profiles $U_x/U_0$ as function of z-position. \\ \textit{Dimensionlesss velocity profiles $U_x/U_0$ below barge at $x = 0.3$m with pycnocline at $0.15$m. The velocity profile with $Fr_h = 0.40$ has a signifiant increase in speed and greater gradient, as the amplitude of the internal wave is located near the same location.}}
+		\label{fig:velocityProfileX2If15}
+	\end{figure}
+\end{minipage}\hfill
 \vspace{2ex}
 
 \chapter{Conclusions and further recommendations}
-Computational fluid dynamics has been used to investigate drag resistance on a barge in stratified and non-stratified waters. The free open source software OpenFOAM has been used to get a qualitative understanding and for comparison of stratified and non-stratified fluid flow. \\
+Computational fluid dynamics has been used to investigate drag resistance on a barge in stratified and non-stratified waters. The free open source software OpenFOAM has been used to get a qualitative understanding and for comparison of stratified and non-stratified fluid flow. A comparison of the RANS turbulence models $k-\epsilon$ and $k-\omega$ SST has been conducted to determine which model is most suitable for the simulation of the dead water phenomenon.\\
 \\
+ The comparison consists of convergence tests of the drag coefficients $C_d$ on the barge with draft $D=0.1$m and a pycnocline depth $h/D=2$.  $k-\omega$ SST model was suspected to give the best results, which was shown. The $k-\omega$ SST model had good convergence and gave stable results, while the $k-\epsilon$ was found to be unstable, not cenverging and even giving oscillating $C_d$ for simulations with densimetric Froude number $Fr_h= 0.95$.
 Simulations of a non-stratified fluid showed results with similar behaviour as obtained by Gou et al. \cite{Gou}. The non stratified fluid simulations was shown to have a constant $C_d$, and to have a drag force directly proportional to the square of the simulation speed. Non-stratified simulations yielded rusults with a deviance of $\approx 20\%$ compared to results from gou et al.\\
 \\
 Simulations of stratified showed similar behaviour as Gou et al \cite{Gou}, J. Grue \cite{Grue} and Esmaeilpour \cite{Esmaeilpour}.  increase in $C_d$ is shown as all simulations approached densimetric Froude number in regions of $0.35 \leq Fr_h \leq 0.6$. Peak $C_d$ was found in regions $0.6 \leq Fr_h \leq 0.7$ and decrease for $fr_h > 0.7$ with $C_d$ tending towards non-stratified simulations as $Fr_h$ increased. The same trend was shown for all pycnocline depths $h/D=1$, $1.5$ and $2$. Gou et al. reported peak in regions $0.5 \leq Fr_h \leq 0.6$, while Esmaeilour et al. reported peaks in regions $0.83\leq Fr_h \leq 0.93$, much closer to critical $Fr_h$.\\
@@ -1147,8 +1168,13 @@ The increase in drag was found to be much smaller than similar studies of strati
 \\
 The internal gravity waves and its location below the barge were found to have significant effect on the velocity profile. The increase in speed is caused by the restriction of passage area by the internal wave, giving a greater velocity gradient if the wave amplitude is located below the barge. The waves corresponding to the peak $C_d$ caused a significant increase in the velocity at the stern, causing a lower pressure in addition the greater velocity gradient. \\
 \\
-A comparison of the RANS turbulence models $k-\epsilon$ and $k-\omega$ SST has been conducted. The comparison consists of convergence tests of the drag coefficients $C_d$ on the barge with draft $D=0.1$m and a pycnocline depth $h/D=2$.  $k-\omega$ SST model was suspected to give the best results, which was shown. The $k-\omega$ SST model had good convergence and gave stable results, while the $k-\epsilon$ was found to be unstable, not cenverging and even giving oscillating $C_d$ for simulations with densimetric Froude number $Fr_h= 0.95$.\\
+For future recommendations regarding investigations on the dead water phenomenon, a lot of improvements and approaches can be advised.\\
 \\
+As this project only focused on the internal wave, and leaving out the free surface waves, it would be of great interest to include the free surface and investigate the effects.  Studies with a much better resolved mesh, especially around the pycnocline, is also relevant to see if it could lead to even more increase in resistance than obtained in this project for stratified flow, and better agreement in terms of the greater increase as obtained by Gou et al.\cite{Gou} and Esmaeilpour et al.\cite{Esmaeilpour}. Cases with pycnocline depths $h/D\leq 1$ should be studied to see for which pycnocline depth a maximum resistance is obtained, and when the effect decreases again.\\
+\\
+Comparison of other turbulence models e.g. Spalart almaras model is advised, as it is said to have good preformance for flows with adverse pressure gradients and boundary layers \cite{CFD}. A study of sensitivity to numerical discretization schemes can be conducted, in terms of obtaining higher order of accuracy and stability. Also conducting a comparison of large eddy simulations with RANS simulations is of interest.\\
+\\
+Experiments conducted in a towing tank, allowing for measuring of resistance in combinations with tools to investigate velocity profiles such particle mage velocimetry (PIV) should be conducted. A combination of both experiments and CFD could lead to an even better qualitative understanding of the phenomenon. 
 \begin{thebibliography}{9}
 	\bibitem{Nansen}
 	F. Nansen\\
