@@ -147,7 +147,7 @@ The simulation design chapter describes the numerical experiment, with domain ge
 The rusults are shown and discussd. A conclusion is reached and further recomendations are presented.  
 \chapter{Theory: Governing equations, Turbulence, and Numerical methods.}
 \section{Governing equations}
-The study of viscous flow reaches back to acient times. Humans figured out, with clever intuision, trial and error, the importance of viscous friction. Long before any real theoretical understanding of fluid flow, streamlined weapons and boats have been made to overcome the effects of viscosity. In more recent years the understanding has taken huge leaps. Today we have tools to master viscous flow with the help from theory. The fundamental equation describing viscous flow is called Navier-Stokes equation\cite{White}. With the following assumptions: incompressible, newtonian fluids. Density and viscosity may be different, but for one fluid it is constant. This gives the following equations:
+The study of viscous flow reaches back to ancient times. Humans figured out, with clever intuision, trial and error, the importance of viscous friction. Long before any real theoretical understanding of fluid flow, streamlined weapons and boats have been made to overcome the effects of viscosity. In more recent years the understanding has taken huge leaps. Today we have tools to master viscous flow with the help from theory. The fundamental equation describing viscous flow is called Navier-Stokes equation\cite{White}. With the following assumptions: incompressible, newtonian fluids. Density and viscosity may be different, but for one fluid it is constant. This gives the following equations:
 \begin{eqnarray}
 \label{eqn:continuity}
 \nabla \cdot \mathbf{u} &=& 0 \\ 
@@ -156,16 +156,16 @@ The study of viscous flow reaches back to acient times. Humans figured out, with
 \end{eqnarray}
 where (\ref{eqn:continuity}) is the conservation of mass and (\ref{eqn:momentum}) is the conservation of momentum. $\mathbf{u}$ is the velocity, $p$ is the pressure, density is given by $\rho(\mathbf{x},t)$, the dynamic viscosity is given by $\mu$, $\mathbf{g}$ and $\mathbf{f}_{st}$ is the gravity and surface tension respectively. There are four independent variables, the spatial $x, y$ and $z$ coordinates, and the time $t$.\\
 \\
-The equations are a set of coupled differential equations. In practice, these equations are to difficult to solve analytically, but solutions for some simple geometries and boundary conditions can be found. More complex cases, as almost all flows of engineering significance, needs to bee approximated with numerical techniques. Computational fliud dynamics has become the most viable tool to represent the complex Navier-Stokes equations. Some CFD models will be briefly introduced later in this chapter.\\
+The equations are a set of coupled differential equations. In practice, these equations are too difficult to solve analytically, but solutions for some simple geometries and boundary conditions can be found. More complex cases, as almost all flows of engineering significance, needs to bee approximated with numerical techniques. Computational fluid dynamics has become the most viable tool to represent the complex Navier-Stokes equations. Some CFD models will be briefly introduced later in this chapter.\\
 \\
-Using Navier stokes (\ref{eqn:continuity} and \ref{eqn:momentum}), the goal would be to investigate the forces in most industrial and academic applications. Finding solutions to the equations, either analytical or approximations, makes it possible to calculate the force vector by using:
+Using Navier-Stokes (\ref{eqn:continuity} and \ref{eqn:momentum}), the goal would be to investigate the forces in most industrial and academic applications. Finding solutions to the equations, either analytical or approximate, makes it possible to calculate the force vector by using:
 \begin{equation}
 \mathbf{F} = \int_{surface} \Big(\nu\big(\nabla \mathbf{u} + (\nabla \mathbf{u})^T\big) - p \mathbf{I}\Big) \cdot \mathbf{n} ds.
 \label{eqn:forceVector}
 \end{equation}
-$\mathbf{n}$ is the unit vecctor normal to the surface, $\mathbf {I}$ is the unit matrix and $\nu$ is the kinematic viscosity. \\
+$\mathbf{n}$ is the unit vector normal to the surface, $\mathbf {I}$ is the unit matrix and $\nu$ is the kinematic viscosity. \\
 \\
-Having obtained the force vector, it is usual to quantify the the drag force or resistance by introducing the drag coefficient, a dimensionless quantity given by
+Having obtained the force vector, it is common to quantify the drag force or resistance by introducing the drag coefficient, a dimensionless quantity given by
 \begin{equation}
 C_d = \frac{F_d}{\frac{1}{2}\rho S u^2}.
 \label{eqn:dragCoeff}
@@ -179,16 +179,16 @@ Re = \frac{u_0l_0}{\nu}
 \end{equation}
 where $u$ is a velocity scale, $l_0$ is a characteristic geometric size and $\nu$ is the kinematic viscosity. $Re$ represents the ratio of inertial forces to viscous forces within a fluid flow. Fluid properties can cause dramatic changes to the flow patterns. It is usual to divide flows into three distinct regimes.
 \begin{itemize}
-	\item Low Re flow: \\ Viscous forces dominates and the flow is smooth or laminar regime.
-	\item Intermidieate Re flow: \\ Flow is in a transitional region where it is partly fluctuating and partly laminar regime.
-	\item High Re flow: \\ Inertial forces dominates and the flow is fluctuating or in a turbulent regime.
+	\item Low Re flow: \\ Viscous forces dominate and the flow is smooth or in a laminar regime.
+	\item Intermidiate Re flow: \\ Flow is in a transitional region where it is partly fluctuating and partly in a laminar regime.
+	\item High Re flow: \\ Inertial forces dominate and the flow is fluctuating or in a turbulent regime.
 \end{itemize} 
 Objects advancing through fluids such as water generate free surface waves. At the same time, if an object is advancing through stratified fluids, it generates internal waves. While free surface waves depend on the Froude number: 
 \begin{equation}
 Fr = \frac{U_0}{\sqrt{gL_0}},
 \label{eqn:FroudeNumber}
 \end{equation} 
-internal waves depends on the densimetric Froude number:
+internal waves depend on the densimetric Froude number:
 \begin{equation}
 Fr_h = \frac{U_0}{c^*}.
 \label{eqn:densimetricFroudeNumber}
@@ -205,7 +205,7 @@ Turbulence is the phenomenon where a fluid flow appears to be chaotic and random
 \\
 The main characteristics of turbulence is the transfer of energy from larger spatial scales into smaller, happening in a three dimensional space and time.\\
 \\
- To discuss the main characteristics of turbulence, a usefull concept is that of an "eddy". An eddy can be thought of as typical turbulence pattern of small- and large- scales all co-existing in the same fluid. The eddies consists of vortexes intertwined in a chaotic manner, beeing streched by the mean flow and pulled in random directions by one another. This mechanism ultimately leads to braking of the eddies into smaller ones, leading to an "energy cascade"\cite{CFD}.\\
+ To discuss the main characteristics of turbulence, a useful concept is that of an "eddy". An eddy can be thought of as typical turbulence pattern of small- and large- scales all co-existing in the same fluid. The eddies consist of vortexes intertwined in a chaotic manner, beeing streched by the mean flow and pulled in random directions by one another. This mechanism ultimately leads to braking of the eddies into smaller ones, leading to an "energy cascade"\cite{CFD}.\\
 \\
 The kinetic energy of the mean flow is extracted by the largest scale eddies. Energy from the largest eddies is further extracted to smaller scales, and the kinetic energy is finally dissipated into thermal energy by the small scale eddies \cite{CFD}.\\
 \\
@@ -214,7 +214,7 @@ The turbulent kinetic energy is defined by the units $\sim [m^2/s^2] \sim u_0^2$
 The dissipation rate of kinetic energy is one of the most important results of turbulence theory, and is reffered to as the Kolmogorov relation \cite{Turbulence}. A turbulent eddy with kinetic energy $u_0^2$ either looses its energy or breaks up into smaller eddies in one time scale or period $T \sim l_0/u_0$.\\
 \\
 
-As Reynolds number is very large for turbulent flow, i.e $\frac{u_0l_0}{\nu} \gg 1$, the large scale eddies is independent of the viscosity. To see how viscosity is effecting the turbulent flow, "Kolmogorov micro-scales" can be constructed. Using kinematic viscosity $\nu$ and the dissipation rate $\epsilon$, small scale velocity, length and time can be written out as:
+As Reynolds number is very large for turbulent flow, i.e $\frac{u_0l_0}{\nu} \gg 1$, the large scale eddies are independent of the viscosity. To see how viscosity is effecting the turbulent flow, "Kolmogorov micro-scales" can be constructed. Using kinematic viscosity $\nu$ and the dissipation rate $\epsilon$, small scale for velocity, length and time can be written out as:
 \begin{eqnarray}
 \label{eqn:microLength}
 \eta &=& \big(\frac{\nu^3}{\epsilon}\big)^{1/4}, \\
@@ -226,9 +226,9 @@ v &=& \big(\nu\epsilon\big)^{1/4}, \\
 where  $\eta$ is the micro length-scale, $v$ is the velocity and $\tau$ is the time scale. Reynolds number in the "micro-scale" is given by $\frac{v\eta}{\nu} = 1$, hence the viscosity is of big importance at theese scales. We have that the "micro-scale" eddies is dominated by friction, and small-scale turbulence is almost independent of large scale turbulence for large enough reynolds number.
 
 \subsection{Boundary layer}
-Using Reynolds number (\ref{eqn:ReynoldsNumber}) it is easily shown that, for a thin shear layer flow over a flat plate, inertial forces dominate. A Reynolds number based on $U= 1$m$s^{-1}$, $l_0= 0.1$m and $\nu = 10e-6m^2s^{-1}$ would be $Re_{l_0} = 10e5$, and inertial forces are much larger than viscous forces.\\
+Using Reynolds number (\ref{eqn:ReynoldsNumber}) it is easily shown that, for a thin shear layer flow over a flat plate, inertial forces dominate. A Reynolds number based on $U= 1$m$s^{-1}$, $l_0= 0.1$m and $\nu = 10^{-6}\textit{ }m^2s^{-1}$ would be $Re_{l_0} = 10^5$, and inertial forces are much larger than viscous forces.\\
 \\
-If Reynolds number is based on a length scale $y$ that is decreasing towards $0$, $Re_y$ would eventually be $\mathcal{O}(1)$. The viscous forces is then either equal or bigger than the inertial forces.\\
+If Reynolds number is based on a length scale $y$ that is decreasing towards $0$, $Re_y$ would eventually be $\mathcal{O}(1)$. The viscous forces are then either equal or bigger than the inertial forces.\\
 \\
 This close to the wall, the mean velocity depends on the distance $y$, fluid density $\rho$, viscosity $\nu$ and the wall shear stress $\tau_w$, and is usually called the turbulent boundary layer \cite{CFD}.\\
 \\
@@ -247,9 +247,9 @@ $u_*$ is the friction velocity.\\
 \\
 Turbulent boundary layer consists of two regions:
 \begin{itemize}
-\item Inner region, consists of tre layers:
+\item Inner region, consists of three layers:
 	\begin{itemize}
-	\item where viscous stresses dominates,
+	\item where viscous stresses dominate,
 	\item where turbulent stresses dominate,
 	\item where viscous and turbulent stresses are of similar magnitude.
 	\end{itemize}
@@ -258,14 +258,14 @@ Turbulent boundary layer consists of two regions:
 	\item inertia dominated flow far from the wall.
 	\end{itemize}
 \end{itemize}
-The layer where viscous stresses dominates is called the viscous sub-layer. It is a linear relationship between the velocity and distance to the wall and is given as \cite{CFD}
+The layer where viscous stresses dominate is called the viscous sub-layer. It is a linear relationship between the velocity and distance to the wall and is given as \cite{CFD}
 \begin{equation}
 u^+ = y^+
 \label{eqn:viscousSublayer}
 \end{equation}
 The layer is extremely thin, and lies at $y^+ < 5$ \cite{CFD}.\\
 \\ 
-At the layer where turbulent stresses dominates, called the log-layer, the velocity and distance to the wall has a logarithmic relationship. It is given as \cite{CFD}
+At the layer where turbulent stresses dominate, called the log-layer, the velocity and distance to the wall have a logarithmic relationship. It is given as \cite{CFD}
 \begin{equation}
 u^+ = \frac{1}{\kappa}\ln(y^+) + B
 \label{eqn:logLayer}
@@ -286,7 +286,7 @@ Figure \ref{fig:lawOfTheWall} is showing a plot containing the viscous sub-layer
 
  
 \subsection{Computer modelling of turbulence}
-The modelling of turbulent fluid flows and the Navier-Stokes equations has seen huge advancements as computer speed increases. The number of applications of fluid flow predictions has grown and computerized analysis has become a crucial part in the field of fliud mechanics.\\
+The modelling of turbulent fluid flows and the Navier-Stokes equations has seen huge advancements as computer speed increases. The number of applications of fluid flow predictions has grown and computerized analysis has become a crucial part in the field of fluid mechanics.\\
 \\
 There are three main methods for numerically solving Navier-Stokes equations:
 \begin{itemize}
@@ -296,9 +296,9 @@ There are three main methods for numerically solving Navier-Stokes equations:
 \end{itemize}
 LES and DNS is introduced rather briefly, while RANS will be introduced in a litle bit more detail.
 \subsubsection{RANS}
-For many enginering purposes, the focus is on the mean effect of turbulence, and it is unecessary to resolve the details on all scales.\\
+For many enginering purposes, the focus is on the mean effect of turbulence, and it is unnecessary to resolve the details on all scales.\\
 \\
-A key part of RANS is investigating the effects of fluctuations on the mean flow using Reynolds de-composition. The velocity and pressure is decomposed as:
+A key part of RANS is investigating the effects of fluctuations on the mean flow using Reynolds de-composition. The velocity and pressure are decomposed as:
 \begin{eqnarray}
 \label{eqn:ReynoldsDecompU}
 \mathbf{u} &=& \mathbf{U} + \mathbf{u'} \\
@@ -307,7 +307,7 @@ p &=& P + p',
 \end{eqnarray}
 where $\mathbf{u}$ is the instantaneous flow field, $\mathbf{U}$ is the mean flow field and $\mathbf{u'}$ is the fluctuating part. The same goes for the pressure, where P is mean and p' is the fluctuating part.\\
 \\
-Substituting the de-composed velocity and pressure (\ref{eqn:ReynoldsDecompU}, \ref{eqn:ReynoldsDecompP}) into Navier-Stokes equations (\ref{eqn:continuity}, \ref{eqn:momentum}) and taking the time-mean, the following continuity and momentum equations using suffix notation is derived:
+Substituting the de-composed velocity and pressure (\ref{eqn:ReynoldsDecompU}, \ref{eqn:ReynoldsDecompP}) into Navier-Stokes equations (\ref{eqn:continuity}, \ref{eqn:momentum}) and taking the time-mean, the following continuity and momentum equations using suffix notation are derived:
 \begin{eqnarray}
 \label{eqn:RANScontinuity}
 \frac{\partial U_i}{\partial x_j}  &=& 0 \\
@@ -316,9 +316,9 @@ Substituting the de-composed velocity and pressure (\ref{eqn:ReynoldsDecompU}, \
 \end{eqnarray}
 Here $U_i$ is the mean velocity, P is the mean pressure and $\overline{u_i'}$ is the mean fluctuating velocity.\\
 \\
-In the momentum equation (\ref{eqn:RANSmomentum}), the new term $\frac{\partial }{\partial x_j}(\overline{u_i'u_j'})$ is derivative of the Reynolds stress-tensor \citep{UNIK4900}. It appears from the convective part $ \mathbf{u} \cdot \nabla \mathbf{u}$ of Navier-Stokes equations (\ref{eqn:momentum}), and is not really stresses. The physical meaning of the term is the averaged effect of turbulent advection on the mean flow field \cite{UNIK4900}.\\
+In the momentum equation (\ref{eqn:RANSmomentum}), the new term $\frac{\partial }{\partial x_j}(\overline{u_i'u_j'})$ is the derivative of the Reynolds stress-tensor \citep{UNIK4900}. It appears from the convective part $ \mathbf{u} \cdot \nabla \mathbf{u}$ of Navier-Stokes equations (\ref{eqn:momentum}), and are not really stresses. The physical meaning of the term is the averaged effect of turbulent advection on the mean flow field \cite{UNIK4900}.\\
 \\
-With the new term, the RANS equations is unclosed, with 6 more unknowns appearing from the Reynolds stress-tensor. The four equations has in total 10 unknowns (pressure, three velocity components and six "stresses"). In order to close the problem, enough equations must be found to solve for all the unknowns. In many models, such as one-equation and two-equation models (see \citep{Wilcox} chapter 4), the Boussinesq eddy-viscosity approximation \citep{CFD} is assumed to be valid. The Reynolds stresses are modelled as follows:
+With the new term, the RANS equation is unclosed, with 6 more unknowns appearing from the Reynolds stress-tensor. The four equations have in total 10 unknowns (pressure, three velocity components and six "stresses"). In order to close the problem, enough equations must be found to solve for all the unknowns. In many models, such as one-equation and two-equations models (see \citep{Wilcox} chapter 4), the Boussinesq eddy-viscosity approximation \citep{CFD} is assumed to be valid. The Reynolds stresses are modelled as follows:
 \begin{eqnarray}
 \label{eqn:bossinesq}
 \tau_{ij} = \overline{u_i'u_j'} = \frac{2}{3}k\delta_{ij} - \nu_t\big(\frac{\partial U_i}{\partial x_j} + \frac{\partial U_j}{\partial x_i}\big)\\
@@ -327,19 +327,19 @@ k = \frac{1}{2}\overline{u_i' u_i'} = \frac{1}{2}\big(\overline{u_1^{'2}} + \ove
 \end{eqnarray}
 where $k$ is the turbulent kinetic energy per unit mass, $\nu_t$ is the turbulent or eddy viscosity and $\delta_{ij}$ is the Kronecker  delta.\\
 \\
-Substituting the Boussinesq eddy-viscosity approximation (\ref{eqn:bossinesq}) into the RANS momentum equation (\ref{eqn:RANSmomentum}) leads to:
+Adding the Boussinesq eddy-viscosity approximation (\ref{eqn:bossinesq}) into the RANS momentum equation (\ref{eqn:RANSmomentum}) leads to:
 \begin{equation}
 \frac{\partial U_i}{\partial t} +  \frac{\partial}{\partial x_j}(U_i U_j) = -\frac{1}{\rho} \frac{\partial P'}{\partial x_i} +  \frac{\partial}{\partial x_j}\Big[ \big(\nu + \nu_t\big) \frac{\partial U_i}{\partial x_j}\Big].
 \end{equation}
-where $P' = \big(P + \frac{2k}{3}\delta_{ij} \big)$ called the modified pressure\cite{Pope}, often used in CFD.\\
+where $P' = \big(P + \frac{2k}{3}\delta_{ij} \big)$, called the modified pressure\cite{Pope}.\\
 \\
 To complete the closure of the RANS equations, the eddy viscosity term $\nu_t$ needs to be modelled. Dimensional analysis dictates that $\nu_t$ needs to be proportinal to the product of a characteristic velocity and a characteristic length scale \cite{Wilcox,AppliedMathematicalModelling}\\
 \\
 This paper is using two turbulence models for comparison, namely the two-equation models k-$\epsilon$ and the shear stress transport model $k-\omega$ SST.
 \subsubsection{$\boldsymbol{k}-\boldsymbol{\epsilon}$ model}
-The standard $k-\epsilon$ model equations is found in a lot of litterature such as \cite{CFD} and \cite{UNIK4900}.\\
+The standard $k-\epsilon$ model equations are found in a lot of litterature such as \cite{CFD} and \cite{UNIK4900}.\\
 \\
-The $k-\epsilon$ model is perhaps the most widely used, giving good results in classical shear flows. It does however have shortcomings in accurately predicting adverse pressure gradients and boundary layers. despite its shortcomings, the model is recommended in cases with multiphase problems by som literature, i.e \cite{AppliedMathematicalModelling}.\\
+The $k-\epsilon$ model is perhaps the most widely used, giving good results in classical shear flows. It does however have shortcomings in accurately predicting adverse pressure gradients and boundary layers. despite its shortcomings, the model is recommended in cases involving multiphase problems by som sources, i.e \cite{AppliedMathematicalModelling}.\\
 \\ 
 The model equations are specified as follows:\\
 \\
@@ -379,16 +379,30 @@ Turbulent kinetic energy equation:
 Turbulent specific dissipation rate equation:
 \begin{equation}
 \frac{\partial \rho \omega}{\partial t} + U_j \frac{\partial \rho \omega}{\partial x_j} =
-\frac{\partial }{\partial x_j}\Big[\big(\mu + \sigma_{\omega}\mu_t\big)\frac{\partial k}{\partial x_j} \Big] + \frac{\gamma}{\nu_t} \rho P - \beta \rho \omega^2 + 2\big(1 -F_1\big)\frac{\rho \sigma_{\omega 2}}{\omega}\frac{\partial k}{\partial x_j}\frac{\partial \omega}{\partial x_j}
+\frac{\partial }{\partial x_j}\Big[\big(\mu + \sigma_{\omega 1}\mu_t\big)\frac{\partial k}{\partial x_j} \Big] + \frac{\gamma}{\nu_t} \rho P - \beta \rho \omega^2 + 2\big(1 -F_1\big)\frac{\rho \sigma_{\omega 2}}{\omega}\frac{\partial k}{\partial x_j}\frac{\partial \omega}{\partial x_j}
 \label{eqn:kOmegaSSTOmegaequation}
 \end{equation}
-Here $P = \tau_{ij}\frac{\partial U_i}{\partial x_j}$, and $\tau_{ij}$ is the Boussinesq assumption (\ref{eqn:bossinesq}).
+Here $P = \tau_{ij}\frac{\partial U_i}{\partial x_j}$, and $\tau_{ij}$ is the Boussinesq assumption (\ref{eqn:bossinesq}). The model constants are given by: $\sigma_k = 0.85$, $\beta^* = 0.09$, $\sigma_{\omega 1} = 0.5$, $\gamma = 0.56$, $\beta = 0.083$ and $\sigma_{\omega 2} = 0.856$.\\
+\\
+The additional function $F_1$ is given by:
+\begin{equation}
+F_1 = \tanh\big(arg_1^4\big)
+\end{equation}
+and $arg_1$ is given by:
+\begin{equation}
+arg_1 = min\Big[max\big(\frac{\sqrt{k}}{\beta^* \omega d}, \frac{500 \nu}{d^2 \omega}\big), \frac{4 \rho \sigma_{\omega 2} k}{CD_{k \omega} d^2}\Big]
+\end{equation}
+$CD_{k\omega}$ is given by:
+\begin{equation}
+CD_{k\omega} = max\Big(2 \rho \sigma_{\omega 2} \frac{1}{\omega} \frac{\partial k}{\partial x_j}\frac{\partial \omega}{\partial x_j}, 10^{-20} \Big)
+\end{equation}
+Here d is the distance from the field point to the nearest wall and $\rho$ is density. 
 \subsubsection{LES}
-While RANS has the main focus on the mean flow, LES is resolving large scale turbulence. While the effects of large eddies on the flow is resolved, the effect of the small scale eddies is included by a sub-grid scale models \cite{CFD}. \\
+While RANS have the main focus on the mean flow, LES is resolving large scale turbulence. While the effects of large eddies on the flow are resolved, the effect of the small scale eddies are included by a sub-grid scale models \cite{CFD}. \\
 \\
 In LES modeling, a spatial filter is used to separate small sclaes from large scales. The method is started off with a filtering function and a "cutoff" witdh, where all scales greater than the "cutoff" width is resolved. \\
 \\
-A filtering operation  of the filter function function is done in the following manner \cite{CFD}:
+A filtering operation of the filter function is done in the following manner \cite{CFD}:
 \begin{equation}
 \overline{\phi}(\mathbf{x}, t) = \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}\int_{-\infty}^{\infty} G(\mathbf{x}, \mathbf{x'} \Delta)\phi(\mathbf{x'},t)dx_1'dx_2'dx_3',
 \label{eqn:filteringOperation}
@@ -402,7 +416,7 @@ Filtering the Navier-stokes equations (\ref{eqn:continuity} and \ref{eqn:momentu
 \label{eqn:LESmomentum}
 \frac{\partial \overline{u}_i}{\partial t} +  \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} &=& -\frac{1}{\rho} \frac{\partial \overline{p}}{\partial x_i} + \nu \frac{\partial ^2 \overline{u}_i}{\partial x_j \partial x_j} - \frac{\partial \tau_{ij}}{\partial x_j}.
 \end{eqnarray}
-Here the overline denotes filtered flow variable, and $\tau_{ij}$ is the sub-grid scale stresses. The sub-grid scale stresses are part of the unresolved sub-grid scales. \\
+Here the overline denotes filtered flow variable, and $\tau_{ij}$ are the sub-grid scale stresses. The sub-grid scale stresses are part of the unresolved sub-grid scales. \\
 \\
 For further introduction of the LES model, Books such as \cite{CFD} and \cite{LESTurbulence} and papers such as \cite{AppliedMathematicalModelling} is recomended. 
 \subsubsection{DNS}
@@ -411,9 +425,9 @@ DNS involves numerical solution of the full Navier-Stokes equations. The method 
 Using "Kolmogorov's micro- scales" (\ref{eqn:microLength} and \ref{eqn:microTime}), ratio's of the largest and smallest scales can be obtained. The ratio of the largest and the smallest scales are proportional to  $Re^{3/4}$ and the ratio of the largest and smallest time scale is proportional to $Re^{1/2}$. $Re = 10^4$ requires a spatial resolution of $\mathcal{O}(10^3)$ in each direction, and the simulation must run for atleast $100$ time steps. Computing meshes with $10^9$ grid points with $100$ time steps is very demanding, even with a modest Reynolds number. Computing industrial flows with higher Reynolds number is impossible with current technology \cite{CFD, AppliedMathematicalModelling}.
 
 \section{Volume of fluid}
-When there is multiple fluids in a computation, there is need for an interface tracking or interface capturing. To handle multiple-fluid interactions, the volume of fluid method used.\\
+When there are multiple fluids in a computation, there is need for an interface tracking or interface capturing. To handle multiple-fluid interactions, the volume of fluid-method is used.\\
 \\
-For each fluid component, a volume fraction is introduced. If $V$ is a volume of a cell in a computaional domain, and $\alpha(\mathbf{x}, t)$ is the volume fraction, the volume fraction for two fluids is defined as \citep{VOF2}
+For each fluid component, a volume fraction is introduced. If $V$ is a volume of a cell in a computaional domain, and $\alpha(\mathbf{x}, t)$ is the volume fraction, the volume fraction for two fluids are defined as \citep{VOF2}
 \begin{equation}
 \alpha(\mathbf{x},t) = \left\{
         \begin{array}{ll}
@@ -454,7 +468,7 @@ Desity and viscosity are defined as:
 Numerical discretization is the prosses of transferring differential equations, such as the Navier- Stokes equations (\ref{eqn:continuity} and \ref{eqn:momentum}), into descrete counterparts.
 A discretization method is needed in order to evaluate the equations on computers. \\
 \\
-There are three discretisation methods generally used when approximating equations. Finite difference method, finite element method and finite volume method.\\
+There are three discretisation methods generally used when approximating equations. Finite difference-method, finite element-method and finite volume-method.\\
 \\
 As in most commercial well-established CFD codes, this thesis is using the finite volume method. Fvm is one of the most versitaile discretization techniques used in cfd \cite{CFD}.\\
 \\
@@ -463,7 +477,7 @@ An outline for the disctretization procedure can be presented with the following
 \item Integration of the governing equations of fluid flow all over the finite control volumes of the domain.
 \item Conversion of the resulting integral equations into a system of algebraic equations.
 \end{itemize}
-A steady one convection-diffusion equation of a property $\phi$ without a source term is given as:
+A steady convection-diffusion equation of a property $\phi$ without a source term is given as:
 \begin{equation}
 \nabla \cdot (\rho \mathbf{u} \phi) =  \nabla \cdot (\Gamma \nabla \phi),
 \label{eqn:stdConvDiff}
@@ -513,12 +527,12 @@ Gauss integration, i.e. Gauss theorem \cite{CFD} is applied to change the integr
 \caption{Control Volume around a cell center P}
 \label{fig:ControlVolume}
 \end{figure}
-In one dimension and using the control volume shown in figure \ref{fig:ControlVolume} the integration of the convection-diffusion equation (\ref{eqn:intStdConvDiff}) gives:
+In one dimension, and using the control volume shown in figure \ref{fig:ControlVolume}, the integration of the convection-diffusion equation (\ref{eqn:intStdConvDiff}) gives:
 \begin{equation}
 \big(\rho u A \phi\big)_e - \big(\rho u A \phi\big)_w = \Big(\Gamma A \frac{d \phi}{dx}\Big)_e - \Big(\Gamma A \frac{d \phi}{dx}\Big)_w.
 \label{eqn:intStdConvDiffDiscr} 
 \end{equation}
-In order to convert the resulting equation (\ref{eqn:intStdConvDiffDiscr}) into a system of algebraic equation, differencing schemes is used.\\
+In order to convert the resulting equation (\ref{eqn:intStdConvDiffDiscr}) into a system of algebraic equations, differencing schemes is used.\\
 \\
 Using central differencing on $d\phi /dx$ at the faces e and w and rewriting the property $\phi$ at the same faces as:
 \begin{eqnarray}
@@ -538,16 +552,16 @@ Rewriting the central difference expression (\ref{eqn:centralDiscretized}), and 
 \Big[(- \frac{\rho u_e}{2} + \frac{\Gamma}{\Delta x_{PE}})A_e\Big]\phi_E + \Big(\frac{\rho u_w}{2} + \frac{\Gamma}{\Delta x_{WP}} )A_w \Big]\phi_W
 \label{eqn:centralDiscretized2}
 \end{eqnarray}
-If it is well defined by boundary conditions, the above equation (\ref{eqn:centralDiscretized2}) can be solved as a system of linear equation i.e.:
+With well defined by boundary conditions, the above equation (\ref{eqn:centralDiscretized2}) can be solved as a system of linear equations i.e.:
 \begin{equation}
 \mathbf{A}\mathbf{x}=\mathbf{b}
 \label{eqn:sysOfLinearEqn}
 \end{equation}
 Where $\mathbf{A}$ is a $m \times n$ matrix, $\mathbf{x}$ is a column vector with $n$ entries and b is a column vector with $m$ entries.\\
 \\
-Using the FVM, the discretizations is carried directly in the physical domain. There is no need for any transformation between the physical and computational coordinate, making the FVM flexible and popular method for computational fluid dynamics \cite{CFDOpenFOAM}.
+Using the finite volume-method, the discretizations is carried directly in the physical domain. There is no need for any transformation between the physical and computational coordinate, making the finite volume-method flexible and popular method for computational fluid dynamics \cite{CFDOpenFOAM}.
 \chapter{OpenFOAM}
-All computanial fluid dynamis is structured around numerical algorithms that tackles fliud flow problems. Classical solvers are implemented in well-established CFD codes such as CFX/ANSYS, FLUENT and OpenFOAM. The software used in this thesis is OpenFOAM.\\
+All computanial fluid dynamics are structured around numerical algorithms that tackles fliud flow problems. Classical solvers are implemented in well-established CFD codes such as CFX/ANSYS, FLUENT and OpenFOAM. The software used in this thesis is OpenFOAM.\\
 \\   
 As in all well-established CFD codes, the work flow consists of three main elements:
 \begin{itemize}
@@ -567,11 +581,11 @@ This paper is using the free, open sorce software OpenFOAM (Field Operation and 
 \\
 Figure \ref{fig:caseStructure} illustrates an initial state of an OpenFOAM case. Three directories are located in the case folder: 0, constant and system.\\
 \\
-The 0 directory contains files for the different parameters essential for the problem. Each file defines initial values and boundary conditions for the numerical experiment.\\
+The 0 directory contains files for the different variables essential for the problem. Each file defines initial values and boundary conditions for the numerical experiment.\\
 \\
-The \textit{constant} directory contains, as the name suggests, all the constants of the case. Constant variables such as gravitation \textit{g}, \textit{transportProperties} as density and viscosity and \textit{turbulenceProperties} are defined in separate files. The subdirectory \textit{polyMesh} contains the mesh geometry.\\
+The \textit{constant} directory contains, as the name suggests, all the constants of the case. Constant properties such as gravitation \textit{g}, density $\rho$ and viscosity $\nu$ are put in files \textit{g} and \textit{transportProperties}. Turbulence specifications are set in the file \textit{turbulenceProperties}. The subdirectory \textit{polyMesh} contains the specifics of the mesh geometry.\\
 \\
-The \textit{system} directory contains information about meshing of the numerical experiment, how to discretize and solve the equations. The file controlDict controls ehich solver is used, timecontrols and data output controls. As the names suggests, \textit{fvSchemes} and \textit{fvSolution} contains information about discretization schemes and solution algorithms respectively. 
+The \textit{system} directory contains information about meshing of the numerical experiment, how to discretize and solve the equations. The file controlDict controls which solver is used, timecontrols and data output controls. As the names suggests, \textit{fvSchemes} and \textit{fvSolution} contains information about discretization schemes and solution algorithms respectively. 
 \begin{figure}[H]
 \centering
 \begin{forest}
@@ -625,7 +639,7 @@ where
 	\item $\rho = \alpha_1 \rho_1 + \alpha_2 \rho_2 = \alpha_1\rho_1 + (1 - \alpha_1)\rho_2$.
 	\item $D_{ab}$ is the molecular diffusivity.
 	\item $\nu_t$ is the turbulent eddy viscosity.
-	\item $s_c$ is the Schmidt number, given as $\mu / (\rho D)$.
+	\item $s_c$ is the turbulent Schmidt number, given as $\mu / (\rho D)$.
 \end{itemize}
 The continuity and momentum equation is given, respectively, as: 
 \begin{eqnarray}
@@ -643,19 +657,24 @@ where
 The term $\nabla(p_{rgh})$ and $gh \nabla \rho$ is obtained by using $P = p_{rgh} + \rho gh$. The Solver is using the Boussinesq eddy-viscosity approximation (\
 ref{eqn:bossinesq}), and $p$ is the modified pressure and containes the kinetic energy per unit mass $\frac{2}{3}k\delta_{ij}$.
 \section{Turbulence models}
-This paper is using the RANS method to approximate turbulence. In order to close the RANS equations, turbulence models are beeing used. Two different two-equation models are implemented for comparison.\\
+This paper is using the RANS method to estimate turbulence. In order to close the RANS equations, turbulence models are beeing used. Two different two-equation models are used for comparison of applicability in solving the dead water phenomenon.\\
 \\
-The turbulence models used in this paper are the $k-\omega$ SST and the $k-\epsilon$ turbulence model. In section Introduction to openFOAM \ref{sec:IntroductionToOpenFOAM}, the \textit{constant} directory shown in figure \ref{fig:caseStructure} contains the file \textit{turbulenceProperties}. Here it is defined what simulation type that is beeing used, i.e. RANS. It also specifies which turbulence model to use.
+The turbulence models used in this project are the $k-\omega$ SST and the $k-\epsilon$ turbulence model. In section Introduction to openFOAM \ref{sec:IntroductionToOpenFOAM}, the \textit{constant} directory shown in figure \ref{fig:caseStructure} contains the file \textit{turbulenceProperties}. Here it is defined what simulation type that is beeing used, i.e. RANS. It also specifies which turbulence model to use.
 \section{Numerical schemes}
 Having defined the equations to be solved in in section \textit{TwoLiquidMixingFoam} (\ref{sec:TwoLiquidMixingFoam}), the way in which to discretize the equations are defined in the file \textit{fvSchemes} found in figure \ref{fig:caseStructure}. The file consists of sub-dictionaries with name corresponding to terms within the equations given in section \textit{TwoLiquidMixingFoam} (\ref{sec:TwoLiquidMixingFoam}). For each term a numerical scheme must be specified.\\
 \\
-Time derivative term $\partial / \partial t$ are discretized by using an \textit{Euler} scheme, a first order implicit difference scheme and is given in the sub-dictionary \textit{ddtSchemes}.\\
+Time derivative term $\partial / \partial t$ are discretized by using an \textit{Euler} scheme, a first order implicit difference scheme and is given in the sub-dictionary \textit{ddtSchemes}. The time steps are adjusted during the simulation. That means the time steps used is set during the simulation according to the courant number, given as:
+\begin{equation}
+C = \frac{u \Delta t}{\Delta x}
+\label{eqn:courantNumber}
+\end{equation}
+Where $u$ is the velocity. The time steps are adjusted according to a maximum courant number set to $1.0$.\\
 \\
 The other terms are discretized using finite volume method. As explained in section \textit{Numerical discretization} \ref{sec:NumericalDiscretization}, the fvm discretization procedure is done by using gaussian integration and converting the resulting terms into algebraic equations using differencing schemes.\\
 \\
-Gradient terms $\nabla$ is set in the sub-dictionary \textit{gradSchemes}. The terms are discretized by using \textit{Gauss linear}, where the \textit{Gauss} entry denotes Gaussian integrationand the \textit{linear} entry denotes a central differencing scheme.\\
+Gradient terms $\nabla$ are set in the sub-dictionary \textit{gradSchemes}. The terms are discretized by using \textit{Gauss linear}, where the \textit{Gauss} entry denotes Gaussian integration and the \textit{linear} entry denotes a central differencing scheme.\\
 \\
-Divergence terms $\nabla \cdot$ is set in the sub-dictionary \textit{divSchemes}. There are several divergence terms needing discretization, and specified as:
+Divergence terms $\nabla \cdot$ are set in the sub-dictionary \textit{divSchemes}. There are several divergence terms needing discretization, and specified as:
 \begin{itemize}
 \item \textit{div(rhoPhi,U) Gauss linearUpwind grad(U)}
 \item \textit{div(phi,alpha) Gauss vanLeer}
@@ -666,7 +685,7 @@ Divergence terms $\nabla \cdot$ is set in the sub-dictionary \textit{divSchemes}
 \end{itemize}
 The \textit{phi} entry in the \textit{div(phi,...)} is the volumetric flux of velocity. Gauss entry is the Gaussian integration and last entry is the differencing scheme.\\
 \\
-Laplacian terms $\nabla^2$ is set in the sub-dictionary \textit{laplacianSchemes}, and is discretized as \textit{Gauss linear} with the Gaussian integration and a linear differencing scheme.
+Laplacian terms $\nabla^2$ are set in the sub-dictionary \textit{laplacianSchemes}, and are discretized as \textit{Gauss linear} with the Gaussian integration and a linear differencing scheme.
 \section{Solution algorithms}
 There are several solution algorithms implemented in openFOAM. Solution procedures are needed in order to obtain solutions to pressure and momentum. In multiphase modelling, additional solution procedures are needed in order to obtain solution to the phase fraction and the volume of fluid method.\\
 \\
@@ -677,21 +696,21 @@ There is three different algorithms implemented in OpenFOAM for solving the Navi
 \item Pressure-implicit method for pressure-linked equations PIMPLE algorithm.
 \end{itemize}
 Numerical techniques are required for coupling the pressure and momentum quantities.
-All algorithms are iterative procedures for coupling momentum and pressure. SIMPLE is a steady state algorithm, PISO is a transient algorithm and PIMPLE is a semi transient algorithm.\\
+All algorithms are iterative procedures for coupling momentum and pressure \cite{userGuide}. SIMPLE is a steady state algorithm, PISO is a transient algorithm and PIMPLE is a semi transient algorithm \cite{userGuide}.\\
 \\
-The twoLiquidMixingFoam solver is using the PIMPLE algorithm for coupling the pressure and momentum. Since it is a multiphase solver, a multi-dimensionsal limiter for explicit solution i.e MULES algorithm is used for solving the phase fraction alpha.
+The twoLiquidMixingFoam solver is using the PIMPLE algorithm for coupling the pressure and momentum. Since it is a multiphase solver, a multi-dimensionsal limiter for explicit solution i.e MULES algorithm \cite{MULESopenFOAM} is used for solving the phase fraction alpha.
 \chapter{Simulation Design}
-Wether an numerical experiment is succesfull depends largely on the pre-processing. A computational domain has to be made well suited to handle the flow problem. Many factors has to be considered in order to have a good numerical experiment, with mesh quality and and boundary conditions as the key factors.
+Wether a numerical experiment is successful depends largely on the pre-processing. A computational domain has to be made well suited to handle the flow problem. Many factors have to be considered in order to have a good numerical experiment, with mesh quality and and boundary conditions as the key factors.
 \section{Simulation geometry}
-The geometry of the numerical experiment is dependent on computational demands. Ideally the geometry of the domain would include the entire barge and a farfield consisting of air, fresh- and salt-water. A domain including all aspects of the fluid problem would bee much more suitable as the case would bee more physical.\\
+The geometry of the numerical experiment is dependent on computational demands. Ideally the geometry of the domain would include the entire barge and a farfield consisting of air, fresh and salt water. A domain including all aspects of the fluid problem would bee much more suitable as the case would bee more physical.\\
 \\
-With a three dimensional problem such as the "dead-water" phenomenon, the computational costs constrains the experiment to some parts of the flow problem. This and the scope of this thesis, which is limited to five months, makes it necessary to make comprimise between physics and assumptions. The experiment becomes less physical, but the idea is to isolate certain aspects of the problem to investigate, namely the effects of the internal wave.\\
+With a three dimensional problem such as the dead-water phenomenon, the computational costs constrains the experiment to only include some parts of the flow problem. This and the scope of this thesis, which is limited to five months, makes it necessary to make comprimise between physics and assumptions. The experiment becomes less physical, but the idea is to isolate certain aspects of the problem to investigate, namely the effects of the internal wave.\\
 \\
-The geometry of the computational domain consists of a barge surface and a farfield. Farfield includes inlet, outlet, atmosphere, bottom, front and back in order to have a closed domain. Only the draft of the barge is included, making the top of the domain located at the free-surface.\\
+The geometry of the computational domain consists of a vessel i.e. the barge draft and a farfield. Farfield includes inlet, outlet, atmosphere, atmosphereFrontOfBarge, bottom, front and back in order to have a closed domain. Since only the draft of the barge is included, the top of the domain located at the free-surface.\\
 \\
-Figure \ref{fig:domain} is showing simulation gemoetry with patches atmosphere, front, inlet and outlet included. The Barge is colored red. The dimensions of the barge is taken from \cite{Gou} and $0.6$ m long (x-dir), $0.45$ m wide (y-dir) and $0.35$ m wide (z-dir).  The geometry used in the numerical experiment is using a symmetry plane in y-direction, halving the computational domain. It further only includes what is below the free surface i.e. the draft of the barge. The dimensions of the barge is therefore $0.6$m long, $0.225$m wide and draft is $0.1$m.\\
+Figure \ref{fig:domain} is showing simulation geometry with with name tags of the patches atmosphere, front, inlet and outlet included. The Barge is colored red. The dimensions of the barge is taken from \cite{Gou} and $0.6$ m long (x-dir), $0.45$ m wide (y-dir) and $0.35$ m wide (z-dir).  The geometry has a symmetry plane at the middle of the barge in the y-direction, halving the computational domain. As it only includes what is below the free surface i.e. the draft of the barge, the dimensions of the barge becomes $0.6$m long, $0.225$m wide. The drraft is to $0.1$m for all the experiments.\\
 \\
-Farfield boundaries are located sufficiently far away to minimize effects of the boundaries on the solution. international Towing Tank Conference has a practical guidelines for ship CFD applications which states that inlet, outlet and "exterior boundary" should be located $1-2$ $\times$ length at draft \cite{ITTC}. This experiment is not modelling the free surface as it is a boundary. It does however modell an internal wave and in combination with highly unstreamlined draft geometry, the resulting farfield  dimensons are:
+Farfield boundaries are located sufficiently far away to minimize its effects on the solution. International Towing Tank Conference has a practical guidelines for ship CFD applications which states that inlet, outlet and "exterior boundary" should be located $1-2$ $\times$ length of draft \cite{ITTC}. This experiment is not modelling the free surface as it is a boundary. It does however model an internal wave and in combination with highly unstreamlined draft geometry, the resulting farfield dimensons are:
 \begin{itemize}
 \item inlet located $10.0$ m upstream in front of barge.
 \item outlet located $-15.0$ m downstream of barge.
@@ -707,13 +726,13 @@ Farfield boundaries are located sufficiently far away to minimize effects of the
 \end{figure}
 
 \section{Simulation set-up}
-Simulations is done with a constant draft $D = 0.1$ m.  The different experiments is conducted by varying the densimetric Froude number in the range $0.3 \leq Fr_h \leq 1.35$.  The densimetric Froude number is varied by changing speeds at constant pycnocline depths giving $h/D$ $=$ $1$, $1.5$ and $2$.\\
+Simulations are done with a constant draft $D = 0.1$ m.  The different experiments are conducted by varying the densimetric Froude number in the range $0.3 \leq Fr_h \leq 1.35$.  The densimetric Froude number is varied by changing speeds at constant pycnocline depths giving $h/D$ $=$ $1$, $1.5$ and $2$.\\
 \\
 Figure \ref{fig:experiment} is showing a schematic overview of the numerical experiment.\\
 \\
-The experiments are done with a moving reference frame, rather than having the barge moving, in order to be able to run simulations sufficiently long.\\
+The experiments are done with a moving reference frame, rather than having the barge moving, in order to be able to run simulations sufficiently long and not complicating the mesh too much.\\
 \\
-The densities of the fluids are set to $997$ kg m$^{-3}$ for fresh water and $1024$ kg m$^{-3}$ for salt water. Kinematic viscosity is set to $\nu = 1.79 \cdot 10^{-6} m^2 s^{-1}$ corresponding to waters at $0^{\circ}$C. Molecular difusivity used is $2.0 \cdot 10^{-5}$. The speed  varies as $0.08\leq U \leq 0.22$ corresponding to Reynolds number (\ref{eqn:ReynoldsNumber}) $26815 \leq Re \leq 73743$.\\
+The densities of the fluids are set to $997$ kg m$^{-3}$ for fresh water and $1024$ kg m$^{-3}$ for salt water. Kinematic viscosity is set to $\nu = 1.79 \cdot 10^{-6} m^2 s^{-1}$ corresponding to waters at $0^{\circ}$C as done by J. Grue in \cite{Grue}. Molecular diffusivity and turbulent Schmidt number are set to respectively $2.0 \cdot 10^{-5}$ and $1.25$ as done in the reaserch \cite{Krpan}. The speed  varies as $0.08\leq U \leq 0.22$ corresponding to Reynolds number (\ref{eqn:ReynoldsNumber}) $26815 \leq Re \leq 73743$.\\
 \\
 
 \begin{figure}[H]
@@ -777,17 +796,18 @@ The densities of the fluids are set to $997$ kg m$^{-3}$ for fresh water and $10
     % Internally the to path is translated to a similar bezier curve,
     % but the to path syntax hides the complexity from the user. 
 \end{tikzpicture}
-\caption{Simulation set-up. \\ \textit{Simulations is done by varying speeds $U$ at constant $h/D = 1$, $1.5$ and $2$. Densities $\rho_0$ and $\rho_1$ is that of fresh- and salt-water respectively for stratified fluid simulations. For non-stratified fluid simulations, $\rho_0 = \rho_1$ }}
+\caption{Simulation set-up. \\ \textit{Simulations are done by varying speeds $U$ at constant $h/D = 1$, $1.5$ and $2$. Densities $\rho_0$ and $\rho_1$ are that of fresh and salt water respectively in stratified fluid simulations. For non-stratified fluid simulations, $\rho_0 = \rho_1$.}}
 \label{fig:experiment}
 \end{figure}
 
 \section{Boundary and Initial conditions}
-Before simulating and solving the numnerical experiment, the momentum and continuity equations (\ref{eqn:momentum} \ref{eqn:continuity}) must have appropriate initial and boundary conditions.\\
+Before simulating and solving the numerical experiments, the momentum and continuity equations (\ref{eqn:momentum} \ref{eqn:continuity}) must have appropriate initial and boundary conditions.\\
 \\
-Boundary conditions are required component of the mathematical model that directs the motion of the flow. It specifies the fluxes such as mass and momentum into and out of the computational domain.\\
+Boundary conditions are required component of the mathematical model that directs the motion of the flow. It specifies the fluxes such as mass and momentum, into and out of the computational domain.\\
 \\
-OpenFOAM is representing boundaries as patches consisting of faces, and all inital and and boundary data are assigned to the patches. Table \ref{tbl:boundaries} is showing an overview of all initial and boundary conditions for simulations using the turbulence modell k-omega SST .\\
+OpenFOAM is representing boundaries as patches consisting of faces, and all inital and and boundary conditions are assigned to the patches. Table \ref{tbl:boundaries} is showing an overview of all initial and boundary conditions for simulations using the turbulence model k-omega SST .\\
 \\
+All descriptions of the boundary conditions are obtain from the source code of OpenFOAM, where usage of the boundary conditions are described. If other wise, it is stated.
 \begin{landscape}
 	\begin{table}[H]
 		\centering
@@ -826,24 +846,32 @@ OpenFOAM is representing boundaries as patches consisting of faces, and all init
 \end{landscape}
 
 \subsection{U}
-For velocity U, typical dirichlet boundary conditions is a applid at the inlet and on the barge. At the inlet there is \textit{fixedValue}  while a no-slip condition is set at the barge. The no-slip condition is a of a special kind, namely \textit{movingWallVelocity}, which is applied for "moving" walls when it is a moving reference frame.\\
+For velocity U, typical dirichlet boundary condition is a applid at the inlet and on the barge. At the inlet it is set a \textit{fixedValue} while a no-slip condition is set at the barge. The no-slip condition is a of a special kind, namely \textit{movingWallVelocity}, which is applied for "moving" walls when it is a moving reference frame.\\
 \\
 At outlet there is an \textit{outletPhaseMeanVelocity}. This boundary condition adjusts the velocity for the given phase to achieve the specified mean, thus causing the phase-fraction to adjust according to the mass flow rate.\\
 \\
 \subsubsection{Boundary conditions at the free surface}
-Since the simulation only includes what happens below the water surface, and the main focus of the experiments is the investigation of the internal wave it, has been rather tricky to decide boundaries for the free surface. The free surface waves that is generated should bee of very small wave length and height due to low Froude numbers (\ref{eqn:FroudeNumber}), as $Fr \leq 0.09 $. An approach has been to apply a Neumann boundary condition of zero gradient at the top. With a zero gradient at the top, the bow of the barge would have been well approximated as the fluid hits the bow and it would allow outflow. At the stern however, the lower pressure would allow inflow. This would have been a good approximation, if the inflow had been consisting of air. The problem is that the inflow at the stern consists of water, causing the interface at the stern to mix and loosing of the stratified water. \\
+
+The free surface waves that is generated when a barge moves at velocities used in these experiments should bee of very small wave length and height, due to low Froude numbers (\ref{eqn:FroudeNumber}). The Froude number $Fr \leq 0.09 $ for all simulations.\\
 \\
-Another approach as been to use a slip condition, which is a mix of Dirichlet and Neumann condition. The flow would then be allowed to flow freely in x- and y direction, but be set at z-direction. This would not allow for in- and outflow.\\
+Esmaeilpour et al. \cite{Esmaeilpour} conducted a study within the same range of densimetric froude numbers as done in this project. They used a domain containing air, fresh and salt water i.e. the free surface was included. They reported very small waves  due to low Froude numbers $Fr \leq 0.05$. For non-stratified flow it was reported that the free surface was flat. For stratified water, the free surface did see a small effected by the internal gravity waves.\\
 \\
-With the low Froude number and the goal of the invistigation beeing the internal wave, this could have been a good approximation. The \textit{slip} condition caused an numerical artifact at at a point of the bow of the barge where another boundary condition of symmetry was set. The \textit{symmetryPlane} condition at the front of the domain allows outflow, causing a one cell intersecting both boundary conditions having very large velocity.\\
+Due to the reporting of Esmaeilpour et al. and computational limitations, the free surface is excluded in this investigation.\\
 \\
-A comprimise has been done, with the top of the domain beeing split into two patches, namely \textit{atmosphere} and \textit{atmosphereFrontOfBarge}. The \textit{atmosphere} patch having a \textit{slip} boundary condition and the \textit{atmosphereFrontOfBarge} having an \textit{inletOutlet} condition. The \textit{inletOutlet} condition is working as a Neumann condition, with the specification of inflow, in case there is any. \\
+Since the simulations only includes what happens below the water surface, and the main focus is on the internal gravity waves, it has been rather tricky to decide boundaries for the free surface.\\
 \\
-These boundary conditions has a very engineering approach to them, and is not very physical. But as stated earlier in this repert, the main focus is the effect of the internal wave. With the air excluded completely from the simulations, and the low Froude numbers, the final boundary conditions of the free surface is sufficient with the goal of the experiment.
+An approach has been to apply a Neumann boundary condition of zero gradient at the top. With a zero gradient at the top, the bow of the barge would have been well approximated as the fluid hits the bow and it would allow outflow. At the stern however, the lower pressure would allow inflow. This would have been a good approximation, if the inflow had been consisting of air. The problem is that the inflow at the stern would consists of water, causing the interface at the stern to mix and loosing of the stratification. \\
+\\
+Another approach as been to use a \textit{slip} condition, which is a mix of Dirichlet and Neumann condition. The flow would then be allowed to flow freely in x- and y direction, but be set to zero in z-direction not allowing for in- and outflow.
+With the low Froude number and the goal of the invistigation beeing the internal wave, this could have been a good approximation. But the \textit{slip} condition caused an numerical artifact at one cell on the bow of the barge with conflicting boundary conditions. This one cell was located where the front and the top intersects on the bow of the barge. The \textit{symmetryPlane} condition at the front of the domain allows for outflow in z-direction. This caused a huge increase of velocity in z-direction at this particular cell. \\
+\\
+A comprimise has been done, with the top of the domain beeing split into two patches, namely \textit{atmosphere} and \textit{atmosphereFrontOfBarge}. The \textit{atmosphere} patch having a \textit{slip} boundary condition and the \textit{atmosphereFrontOfBarge} having an \textit{inletOutlet} condition. The \textit{inletOutlet} condition is working as a mix of Dirichlet and Neumann condition, with the specification of inflow, in case there is any. \\
+\\
+These boundary conditions have a very engineering approach to them, and is not very physical. But as stated earlier in this report, the main focus is the effect of the internal wave. With the air excluded completely from the simulations, and the low Froude numbers, the final boundary conditions allows for a qualitative reaserch of the dead water phenomenon.
 \subsection{alpha.saltWater}
-The phase fraction \textit{alpha.saltWater} is set in the file \textit{setFieldsDict} where the initial state of the fluid is set.\\
+The phase fraction \textit{alpha.saltWater} is set in the file \textit{setFieldsDict} where the initial state of the two fluids are set.\\
 \\
-As for the boundaries, a fixed value of either $1$ or $0$ is set, where $1$ is salt water and $0$ is fresh water, is set at the inlet. At the outlet, a \textit{variableHightFlowRate} condition is used. It is a phase fraction condition based upon the flow conditions. Values of \textit{alpha.water} is constrained to lay between specified values of upper and lower bounds of $1$ and $0$, i.e.
+For the inlet, Dirichlet condition of a fixed value of either $1$ or $0$ are set, where $1$ is salt water and $0$ is fresh water. At the outlet, a \textit{variableHightFlowRate} condition is used. It is a phase fraction condition based upon the flow conditions. Values of \textit{alpha.water} is constrained to lay between specified values of upper and lower bounds of $1$ and $0$, i.e.
 \begin{itemize}
 \item If \textit{alpha.water} > 1:
 	\begin{itemize}
@@ -860,40 +888,46 @@ As for the boundaries, a fixed value of either $1$ or $0$ is set, where $1$ is s
 \end{itemize}
 At the \textit{barge}, a Neumann condition of \textit{zeroGradient} is applied. The same goes for \textit{atmosphere} and \textit{atmosphereFrontOfBarge}.
 \subsection{p\_rgh}
-For pressure, a \textit{fixedFluxPressure} is used at the inlet and on the barge. The pressure is not known at inlet. The \textit{fixedFluxPressure} is a Neumann condition that is accounting for the flux specified by the velocity set at the boundary.\\
+For pressure, a \textit{fixedFluxPressure} is used at the \textit{inlet} and on the \textit{barge}. The pressure is not known at \textit{inlet}. The \textit{fixedFluxPressure} is a Neumann condition that is accounting for the flux specified by the velocity set at the boundary.\\
 \\
-For the barge, the velocity is set to 0 by the \textit{noSlip} boundary condition, so the Neumann  condition becomes a \textit{zeroGradient} in reality.\\
+Since the velocity is set to 0 by the \textit{noSlip} boundary condition on the \textit{barge}, the Neumann condition becomes a \textit{zeroGradient} in reality.\\
 \\
-At the athmospere and atmosphereFrontOfBarge patches there is Dirichlet boundary of \textit{fixedValue} 0. At the outlet there is a Neumann boundary condition of \textit{zeroGradient}. 
+At the \textit{athmospere} and \textit{atmosphereFrontOfBarge} patches there is Dirichlet boundary of \textit{fixedValue} 0. At the outlet there is a Neumann boundary condition of \textit{zeroGradient}. 
 \subsection{Turbulence properties k, nut, omega and epsilon}
-All of the turbulence properties nut, k, omega and epsilon are set with \textit{zeroGradient} at the top patches \textit{atmosphere} and \textit{atmosphereFrontOfBarge}.\\
+All of the turbulence properties nut, k, omega and epsilon are set with a Neumann condition of \textit{zeroGradient} at \textit{atmosphere} and \textit{atmosphereFrontOfBarge}.\\
 \\
 At the inlet, Dirichlet boundaries are set as a fixed value, calculated from equations for setting farfield turbulence conditions.\\
 \\
-Farfield turbulent kinetic energy is set by using:
+Farfield turbulent kinetic energy is set as recommended in \cite{practicalShip}by using:
 \begin{equation}
 k = \frac{3}{2}(UI)^2,
 \label{eqn:turbulentKineticEnergy}
 \end{equation}
 where U is the freestrem speed and I is the turbulence intensity, usually set below 1\% for cases similar to this experiment. \\
 \\
-Farfield omega conditions is set by using:
+Farfield omega conditions is set by using \cite{turbulenceFreeStream}
 \begin{equation}
 \omega = \frac{\sqrt{k}}{C_{\mu}^{1/4}l_t}
 \label{eqn:turbulentOmega}
 \end{equation}
 where $C_{\mu}=0.09$ and $l_t$ is the turbulent length scale, set to $l/100$ where l is the length of the barge.\\
 \\
-Turbulent dissipation rate epsilon is set by using:
+Turbulent dissipation rate epsilon is set as recommended in \cite{practicalShip} by using:
 \begin{equation}
 \epsilon =  \frac{c_{\mu}^{3/4} k^{3/2}}{l_t}
 \label{eqn:turbulentDissipationRate}
 \end{equation}
-Finally, the turbulent viscosity is set by using:
+The turbulent viscosity for $k-\omega$ SST is set by using:
 \begin{equation}
 \nu_t = \frac{k}{\omega}
 \label{eqn:turbulentViscosityFarfield}
 \end{equation}
+Finally, the turbulent viscosity for $k-\epsilon$ is set by using:
+\begin{equation}
+\nu_t = C_{\mu}\frac{k^2}{\epsilon}
+\label{eqn:turbulentViscosityFarfield}
+\end{equation}
+
 \subsubsection{Wall functions}
 Wall funtions are used to avoid resolving all scales in the boundary layer. The wall functions use the dimensional analysis of the boundary layer and law of the wall to estimate values near the wall.\\
 \\
@@ -901,13 +935,15 @@ At the barge, wall functions are applied as boundary conditions for all the turb
 \\
 Turbulent viscosity $\nu_t$ is using the wall function \textit{nutUSpaldingWallFunction}. The function is using a special curve fit of the law of the wall, in order to be applicable in the whole boundary layer \cite{Spalding}.\\
 \\
-For turbulent kinetic energy $k$, the wall function \textit{kqrWallFunction} has been used. It uses the log-law layer (\ref{eqn:logLayer}) to estimate values for the boundary. Using this wallFunction would require a distance of the first cell adjecent to the barge to be $y^+ > 30$. This has not been fulfilled with the meshes used in this report, but brief test runs with a wall function applicable for smaller values of $y^+$, has been conducted after the mistake was discovered. \textit{kLowReWallFunction} did not make any signifacant effects on the calculated drag in these test runs.\\
+For turbulent kinetic energy $k$, the wall function \textit{kqrWallFunction} has been used. It uses the log-law layer (\ref{eqn:logLayer}) to estimate values for the boundary. Using this wallFunction would require a distance of the first cell adjecent to the barge to be $y^+ > 30$.\\
+\\
+This has not been fulfilled with the meshes used in this report, but brief test runs with a wall function applicable for smaller values of $y^+$, has been conducted after the mistake was discovered. \textit{kLowReWallFunction} did not make any signifacant effects on the calculated drag in these test runs. A comparison of the wall functions with pycnocline depth $h/D=1.5$ and $Fr_h=0.69$ showed that \textit{kqrWallFunction} had a difference of $0.007\%$ in calculated drag compared to \textit{kLowReWallFunction}\\
 \\
 For omega and epsilon, the wall functions \textit{omegaWallFunction} and \textit{epsilonWallFunction} has been used. Both wall functions are applicable for a wide range og $y^+$ values.
 \section{Mesh and mesh convergence}
 The outcome of a numerical experiment is highly dependent on the mesh quality. A multiphase simulation investigating drag and internal waves needs a mesh suitable to capture the phenomenon. At the same time the mesh has to account for computational cost, as the computational resources available is rather limited for the scope of this thesis.
 \subsection{Meshing procedure}
-The background mesh, or rather the base mesh is made by defining a \textit{blockMeshDict} file that generates a mesh that is refined in the area of the pycnocline shown in figure \ref{fig:baseMesh}. The base mesh is made to be uniform in the spatial x- and y-direction, except for z-direction, where it is refined to better capture the pycnocline in the entire computational domain. Number of cells in the base mesh is 12668. In order to increase mesh quality, refinement is needed.\\
+The base mesh is made by defining a \textit{blockMeshDict} file that generates a mesh as the one shown in figure \ref{fig:baseMesh}. The base mesh is made to be uniform in the spatial x- and y-direction, except for z-direction, where it is refined to better capture the pycnocline in the entire computational domain. Number of cells in the base mesh is 12668. In order to increase mesh quality, refinement is needed.\\
 \\
 \begin{figure}[H]
 	\centering
@@ -916,9 +952,9 @@ The background mesh, or rather the base mesh is made by defining a \textit{block
 	\label{fig:baseMesh}
 \end{figure}
 
-To refine the mesh further, \textit{topoSetDict} and \textit{refineMeshDict} files has been used. In a \textit{topoSetDict}, an area within the mesh is defined which where it is desirable to refine the mesh. The \textit{refineMeshDict} refines the mesh in the specified area in the desired direction. \textit{RefineMeshDict} refines the mesh by splitting every cell within the specified area and in the specified direction.\\
+To refine the mesh further, \textit{topoSetDict} and \textit{refineMeshDict} files has been used. In a \textit{topoSetDict}, an area within the mesh is defined in which it is desirable to refine the mesh. The \textit{refineMeshDict} refines the mesh in the specified area in the desired direction. \textit{RefineMeshDict} refines the mesh by splitting every cell in two within the specified area and in the specified direction.\\
 \\
-By using \textit{topoSetDict} and \textit{refineMeshDict} it is easy to refine the mesh in the important areas within the domain i.e. boundary layer and below the barge at the pycnocline. It is further a useful tool in the means of maintaining cell aspect ratios, which is the ratio of the longest to the shortest side of the cell. Cell aspect ratio can have significant effect on waves in openFOAM \cite{Roenby}. The areas of the domain which is almost un disturbed can be un-refined, making the mesh less computational demanding.\\
+By using \textit{topoSetDict} and \textit{refineMeshDict} it is easy to refine the mesh in the important areas within the domain i.e. boundary layer and below the barge at the pycnocline. It is further a useful tool in the means of maintaining cell aspect ratios, which is the ratio of the longest to the shortest side of the cell. Cell aspect ratio can have significant effect on waves in openFOAM \cite{Roenby}. The areas of the domain which almost is un-disturbed can be left out from refining, making the mesh less computational demanding.\\
 \\
 Figure \ref{fig:RefinedMesh} is showing the mesh after refinenemt which consists of $744794$ cells. 
 \begin{figure}[H]
@@ -928,13 +964,13 @@ Figure \ref{fig:RefinedMesh} is showing the mesh after refinenemt which consists
 	\label{fig:RefinedMesh}
 \end{figure}
 \subsection{Convergence tests}
-Three mesh grids has been systematically refined to evaluate grid convergence. It is done by using a grid refinement ratio of $2$ on the base mesh. The resulting course, medium and fine grids have $4.2\times 10^5$, $7.4\times 10^5$ and $1.3\times 10^6$ cells respectively. The reason for not having a refinement ratio of $2$ on the resulting grids is that the same \textit{topoSetDict} and \textit{refineMeshDict} files are used. The resulting grids does not necessarily get the same refinement ratio, as the refinement procedure using \textit{topoSetDict} and \textit{refineMeshDict} depends on the base mesh.\\
+Three mesh grids have been systematically refined to evaluate grid convergence. It is done by using a grid refinement ratio of $2$ on the base mesh. The resulting course, medium and fine grids have $4.2\times 10^5$, $7.4\times 10^5$ and $1.3\times 10^6$ cells respectively. The reason for not having a refinement ratio of $2$ on the resulting grids is that the same \textit{topoSetDict} and \textit{refineMeshDict} files are used. The resulting grids do not necessarily get the same refinement ratio, as the refinement procedure using \textit{topoSetDict} and \textit{refineMeshDict} depends on the base mesh.\\
 \\
-Two speeds at two different pycnocline depths are used to check for convergence, resulting in  four tests. For each pycnocline depth, two velocities gives  densimetric Froude number corresponding to near-peak drag coefficient and densimetric Froude number close to super critical.\\
+Two speeds at two different pycnocline depths are used to check for convergence, resulting in  four tests. For each pycnocline depth, two velocities giv densimetric Froude number corresponding to near-peak drag coefficient and densimetric Froude number close to super critical.\\
 \\
-Figure \ref{fig:convTestIf01U01} and \ref{fig:convTestIf01U022} are showing test runs with pycnocline located at $0.1$m ($h/D = 1$) below the barge and with $Fr_h = 0.86$ and $Fr_h = 1.35$ respectively. Turbulence model used in the tests are the $k-\omega$ SST. The tests show that there is not much difference between the medium and fine grids, while the corse grid is oscillating around a value of $C_d$ i.e. it has not converged.\\
+Figure \ref{fig:convTestIf01U01} and \ref{fig:convTestIf01U022} are showing test runs with pycnocline located at $0.1$m ($h/D = 1$) below the barge and with $Fr_h = 0.86$ and $Fr_h = 1.35$ respectively. Turbulence model used in the tests are the $k-\omega$ SST. The tests show that there is not much difference between the medium and fine grids, while the corse grid is oscillating.\\
 \\
-Table \ref{tbl:YplussValuesConvergenceTest1} shows the avarage $y^+$ values obtained from the convergence tests. The $y^+$ values lies all within the buffer layer, suggesting that the Wall functions must be applicable for a wide range of $y^+$ values.
+Table \ref{tbl:YplussValuesConvergenceTest1} shows the avarage $y^+$ values obtained from the convergence tests. The $y^+$ values lie all within the buffer layer. The $y^+$ values increase when simulations are conducted with higher velocity. The idea is to make the mesh and have wall-functions applicable for all the range of $y^+$ values in the experiments.
 \begin{table}[H]
 \centering
 \begin{tabular}{c|c|c}
@@ -967,9 +1003,9 @@ Table \ref{tbl:YplussValuesConvergenceTest1} shows the avarage $y^+$ values obta
 \end{minipage}\hfill
 \vspace{2ex}\\
 \\
-Figure \ref{fig:convTestIf02U016} and \ref{fig:convTestIf02U022} are showing test runs with pycnocline located at $0.2$m ($h/D=2$) below the barge and with $Fr_h = 0.61$ and $Fr_h = 0.95$ respectively. Turbulence model used in the tests are the $k-\omega$ SST. The tests show the same trends as the tests done with pycnocline located $0.1$m below the barge.\\
+Figure \ref{fig:convTestIf02U016} and \ref{fig:convTestIf02U022} are showing test runs with pycnocline located at $0.2$m ($h/D=2$) below the barge with $Fr_h = 0.61$ and $Fr_h = 0.95$ respectively. This test is also conducted with the turbulence model $k-\omega$ SST. The tests show the same trends as the tests done with pycnocline located $0.1$m below the barge.\\
 \\
-Table \ref{tbl:YplussValuesConvergenceTest2} shows the avarage $y^+$ values obtained from the convergence tests with pycnocline located at $0.2$m below the barge. The $y^+$ values lies all within the buffer layer, suggesting that the Wall functions must estimate the whole turbulent boundary region
+Table \ref{tbl:YplussValuesConvergenceTest2} shows the avarage $y^+$ values obtained from the convergence tests with pycnocline located at $0.2$m below the barge. The $y^+$ values lies all within the buffer layer.
 \begin{table}[H]
 \centering
 \begin{tabular}{c|c|c}
@@ -1006,13 +1042,13 @@ From the convergence tests it is clear that it is not much to gain convergence w
 
 \chapter{Results}
 \section{Comparison of turbulence models}
-Comparison of the turbulence models was done by running numerical experiments with the exact same mesh. The tests was done with a pycnocline depth of $0.2$m below the barge. Two cases are presented, the first with a densimetric Froude number $Fr_h=0.69$ and the second with $Fr_h=0.95$. The first test lies whithin the range where $Fr_h$ should give peak $C_d$ and the second test where $Fr_h$ should give a lower $C_d$ that tends towards a non-stratified fluid case.\\
+Comparison of the turbulence models were done by running numerical experiments with the exact same mesh. Pycnocline depth was set to $0.2$m below the barge. Two cases are presented, the first with a densimetric Froude number $Fr_h=0.69$ and the second with $Fr_h=0.95$. The first test lies whithin the range where $Fr_h$ should give peak $C_d$ and the second test where $Fr_h$ should give a lower $C_d$ that tends towards a non-stratified fluid case.\\
 \\
-The comparison is done by checking convergence of the $C_d$ for the two cases. The motivation for comparing the $C_d$ and not any other parameters is that of the main scope of this project, investigating the increase in $C_d$ in the range of $0.6\leq Fr_h \leq 0.8$ in stratified fluids. It is essential to have a turbulence model that best approximate the $C_d$ \\
+The comparison is done by checking convergence of $C_d$ for the two cases. The motivation for comparing the $C_d$ and not any other parameters is that of the main scope of this project, investigating the increase in $C_d$ in sub critical densimetric Froude number experiments. It is essential to have a turbulence model that best approximate the $C_d$ \\
 \\
 The first test is shown in figure \ref{fig:turbulenceModelComparison1}. From the figure it is shown that the turbulence model $k-\omega$ SST gives a good convergence of the $C_d$. The model $k-\epsilon$ on the other hand sees an increace of $C_d$ throughout the entire expriment and gets even more unstable as time increases.\\
 \\
-THe second test is shown in figure \ref{fig:turbulenceModelComparison2}, and is showing the same trend as seen in the first test. $k-\omega$ SST gives a good convergence, while $k-\epsilon$ gets an increase in $C_d$ as time increases. In the second test, $k-\epsilon$ even starts to oscillate as the time increases.\\
+The second test is shown in figure \ref{fig:turbulenceModelComparison2}, and is showing the same trend as seen in the first test. $k-\omega$ SST gives a good convergence, while $k-\epsilon$ gets an increase in $C_d$ as time increases. In the second test, $k-\epsilon$ even starts to oscillate as the time increases.\\
 \\
 From the tests it is concluded that $k-\omega$ SST model is the most reliable investigating the "dead water" phenomenon going further.\\
 \\
@@ -1039,7 +1075,7 @@ Even though the theory states that the $k-\omega$ turbulence model yields better
 
 \section{Drag}
 \subsection{Non-stratified fluid}
-Non-stratified fluid simulations was conducted by simulating with a density corresponding to fresh water and with barge draft $D=0.1$m at speeds $0.06$m$s^{-1}$ $\leq$ $U$ $\leq$ $0.24$m$s^{-1}$. \\
+Non-stratified fluid simulations were conducted by simulating with a density corresponding to fresh water and with barge draft $D=0.1$m at speeds $0.06$m$s^{-1}$ $\leq$ $U$ $\leq$ $0.24$m$s^{-1}$. \\
 \\
 Gou et.al conducted the same experiment in a towing tank, with the same dimensions on the barge. Their results showed that drag force is directly proportianal to the square of the towing speed, which means that the $C_d$ is constant.\\
 \\
@@ -1273,6 +1309,11 @@ of Turbulent Flows \\
 	Recommended Procedures and Guidelines, Practical Guidelines for Ship CFD Applications
 	\url{https://ittc.info/media/1357/75-03-02-03.pdf}
 	
+	\bibitem{practicalShip}	
+	Volker Bertram,\\
+	Practical Ship Hydrodynamics\\
+	Butterworth-Heinemann, Oxford (2000)
+	
 	\bibitem{CFDOpenFOAM}
 	Fadl Moukalled, Marwan Darwish, and Luca Mangani.\\
 	The Finite Volume Method in Computational Fluid Dynamics An Advanced Introduction with 	Open-FOAM(R) and Matlab\\
@@ -1299,6 +1340,17 @@ of Turbulent Flows \\
 	A new volume of fluid method in OpenFOAM\\
 	VII International Conference on Computational Methods in Marine Engineering,MARINE 			2017
 	
+	\bibitem{userGuide}
+	OpenFOAM user guide version 5.0\\	
+	\url{http://foam.sourceforge.net/docs/Guides-a4/OpenFOAMUserGuide-A4.pdf}
+	
+	\bibitem{MULESopenFOAM}
+	OpenFOAM 2.3.0: Multiphase Modelling MULES\\
+	\url{https://openfoam.org/release/2-3-0/multiphase/}
+	
+	\bibitem{turbulenceFreeStream}
+	Turbulence free stream conditions
+	\url{https://www.cfd-online.com/Wiki/Turbulence_free-stream_boundary_conditions}
 \end{thebibliography}
 
 \end{document}
